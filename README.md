@@ -1,83 +1,101 @@
 # 0ctopus
 
-Navaja suiza de seguridad informática — Herramienta de línea de comandos todo en uno.
+[![GitHub Repo](https://img.shields.io/badge/Repo-0ctopus-blue)](https://github.com/underc0delabs/0ctopus)
 
-## Requisitos
+**0ctopus** es una navaja suiza de seguridad informática desarrollada por Underc0de Labs. Proporciona varias herramientas de pentesting y análisis a través de un menú interactivo o comandos directos.
 
-- Python 3.10 o superior
-- pip
-- (Opcional) **nmap** instalado en el sistema para detección de servicio y versión
+---
 
-## Instalación
+## 🔧 Características
 
+- Escaneo de puertos avanzado con detección de servicios y versiones.
+- Enumeración de subdominios (incluyendo crt.sh y wordlist local).
+- Crawling de directorios internos con salida formateada.
+- Chequeo rápido de vulnerabilidades en URL base.
+- Captura de paquetes de red (exporta .pcap).
+- Menú interactivo para elegir funcionalidad.
+
+---
+
+## 📦 Instalación
+
+1. Clonar el repositorio:
+   ```bash
+   git clone https://github.com/underc0delabs/0ctopus.git
+   cd 0ctopus
+   ```
+2. Crear y activar un entorno virtual (opcional, pero recomendado):
+   ```bash
+   python3 -m venv env
+   source env/bin/activate    # Linux/macOS
+   env\Scripts\activate     # Windows
+   ```
+3. Instalar dependencias:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+---
+
+## ⚙️ Configuración
+
+Antes de ejecutar cualquier comando, edita el archivo `config.py` definiendo:
+
+```python
+HOST = "dominio.com"         # Host objetivo para escaneos y enumeraciones
+URL_BASE = "https://.../"   # URL base para crawling y chequeo de vulnerabilidades
+```
+
+---
+
+## 🚀 Uso
+
+### Menú interactivo
+
+Sin argumentos, muestra el menú:
 ```bash
-# Clonar el repositorio
-git clone https://github.com/usuario/0ctopus.git
-cd 0ctopus
-
-# Crear y activar entorno virtual
-# Windows:
-python -m venv env
-env\Scripts\activate
-
-# macOS / Linux:
-python3 -m venv env
-source env/bin/activate
-
-# Instalar dependencias
-pip install -r requirements.txt
+python 0ctopus.py
 ```
 
-## Uso
+### Comandos directos
 
-Mostrar ayuda global y listar comandos:
+| Opción               | Descripción                                                      |
+|----------------------|------------------------------------------------------------------|
+| `scan-ports`         | Escaneo de puertos avanzado (salida en `output/port_scan-<HOST>.txt`) |
+| `vuln-check`         | Chequeo de vulnerabilidades (salida en `output/vuln_check-<HOST>.txt`) |
+| `enum-subdomains`    | Enumeración de subdominios (`output/subdomains-<HOST>.txt`)      |
+| `dirb`               | Crawling de directorios internos (`output/dirb_scan-<HOST>.txt`)
+|                      | - `--max-depth N` Profundidad máxima (por defecto 2)             |
+|                      | - `--verbose`     Muestra progreso en consola                   |
+| `sniff-packets`      | Captura paquetes de red en `.pcap` (`output/packets-<HOST>.pcap`)|
 
+**Ejemplo:**
 ```bash
-python 0ctopus.py --help
+python 0ctopus.py dirb --max-depth 3 --verbose
 ```
 
-### Comandos principales
+---
 
-- **scan-ports**  
-  Escanea puertos comunes en `HOST` con detección de servicio y versión. Genera (o reemplaza) el archivo `output/port_scan-<HOST>.txt`.
-  ```bash
-  python 0ctopus.py scan-ports
-  ```
+## 📂 Salida
 
-- **enum-subdomains**  
-  Enumera subdominios de `HOST` usando una lista (`wordlist`).
-  ```bash
-  python 0ctopus.py enum-subdomains --wordlist subdomains.txt
-  ```
+Todos los resultados se guardan en la carpeta `output/`. Los nombres de archivo incluyen el comando y el `HOST` configurado.
 
-- **dirb-scan**  
-  Fuerza bruta de rutas en `URL_BASE` usando una lista de paths.
-  ```bash
-  python 0ctopus.py dirb-scan --wordlist paths.txt
-  ```
+---
 
-- **vuln-check**  
-  Chequeo rápido de vulnerabilidades (headers, SSL, HTTPS) en `URL_BASE`.
-  ```bash
-  python 0ctopus.py vuln-check
-  ```
+## 🤝 Contribuyendo
 
-- **sniff**  
-  Captura paquetes en una interfaz de red. Ejemplo: capturar 10 paquetes en `eth0`.
-  ```bash
-  python 0ctopus.py sniff --interface eth0 --count 10
-  ```
+1. Hacer fork del proyecto.
+2. Crear una rama (`git checkout -b feature/nueva-herramienta`).
+3. Realizar cambios y probar.
+4. Abrir un Pull Request describiendo la funcionalidad.
 
-## Archivo .gitignore
+---
 
-```gitignore
-env/
-__pycache__/
-*.py[cod]
-output/
-```
+## 📄 Licencia
 
-## Licencia
+Este proyecto está bajo licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
 
-Este proyecto está bajo licencia MIT.
+---
+
+> Desarrollado por Underc0de Labs.
 
