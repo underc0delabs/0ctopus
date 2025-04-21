@@ -8,12 +8,13 @@ from datetime import datetime
 from config import HOST, URL_BASE
 from tools.portscanner import scan as portscan
 from tools.dirb import crawl_links
-from tools.subdomain_enum import enumerate as enum_subdomains
+from tools.subdomain_enum import enumerate as enum_subdomains_tool
 from tools.vuln_check import check as vuln_check
 from tools.packet_sniffer import sniff_packets
 
 # Inicializa colorama
-init(autoreset=True)
+def init_color():
+    init(autoreset=True)
 
 # Banner ASCII estático
 BANNER = r"""
@@ -29,6 +30,7 @@ BANNER = r"""
 @click.group()
 def cli():
     """0ctopus: Navaja Suiza de seguridad informática"""
+    init_color()
     click.echo(Fore.GREEN + BANNER)
 
 @cli.command()
@@ -79,7 +81,6 @@ def scan_ports():
 @cli.command(name='vuln-check')
 def vuln_check_cmd():
     """Chequeo rápido de vulnerabilidades en HOST y sus subdominios; guarda resultado en /output"""
-    # Ejecutar check, que retorna un string formateado
     report = vuln_check(URL_BASE)
 
     os.makedirs('output', exist_ok=True)
@@ -87,13 +88,13 @@ def vuln_check_cmd():
     with open(filename, 'w', encoding='utf-8') as f:
         f.write(report)
 
-    # Mostrar reporte en consola
     click.echo(report)
 
-@cli.command()
-def enum_subdomains():
+@cli.command(name='enum-subdomains')
+def cmd_enum_subdomains():
     """Enumera subdominios de HOST definido en config.py y guarda resultado en /output"""
-    encontrados = enum_subdomains(domain=HOST)
+    encontrados = enum_subdomains_tool(domain=HOST)
+
     os.makedirs('output', exist_ok=True)
     filename = os.path.join('output', f'subdomains-{HOST}.txt')
     header = [
@@ -114,13 +115,18 @@ def enum_subdomains():
         click.echo(Fore.CYAN + f"- {sub}")
     click.echo('\n')
 
-@cli.command(name='dirb')
+@cli.command()
 @click.option('--max-depth', default=2, help='Profundidad máxima de crawling')
 @click.option('--verbose', is_flag=True, help='Mostrar detalles en consola')
 def dirb(max_depth, verbose):
     """Crawling de directorios internos y guarda resultado en /output"""
-    results = crawl_links(URL_BASE, max_depth=max_depth, max_workers=10, verbose=verbose)
+    results = crawl_links(URL_BASE, max_depth=max_depth, verbose=verbose)
     total = len(results)
+
+    # Calcular ancho de columna dinámico
+    max_path_len = max((len(path) for path, _ in results), default=len('Path'))
+    col_width = max(max_path_len, len('Path')) + 2
+
     os.makedirs('output', exist_ok=True)
     filename = os.path.join('output', f'dirb_scan-{HOST}.txt')
     header = [
@@ -130,19 +136,19 @@ def dirb(max_depth, verbose):
         f'Total: {total}',
         ''
     ]
-    rows = [f"{path:<40} {status}" for path, status in results]
+    rows = [f"{path:<{col_width}} {status}" for path, status in results]
     with open(filename, 'w', encoding='utf-8') as f:
         f.write('\n'.join(header + rows))
-    click.echo(Fore.CYAN + '\n' + '═'*60)
-    click.echo(Fore.YELLOW + '🔥 CRAWLING DE DIRECTORIOS AVANZADO'.center(60))
-    click.echo(Fore.CYAN + '═'*60)
-    click.echo(Fore.GREEN + header[1])
-    click.echo(Fore.BLUE + header[2] + '\n')
-    click.echo(Fore.CYAN + f"{'Path':<40} Status")
-    click.echo(Fore.WHITE + '-'*60)
+
+    # Impresión en consola con columnas alineadas
+    click.echo(Fore.CYAN + '\n' + '═'*(col_width + 8))
+    click.echo(Fore.YELLOW + '🔥 CRAWLING DE DIRECTORIOS AVANZADO'.center(col_width + 8))
+    click.echo(Fore.CYAN + '═'*(col_width + 8))
+    click.echo(Fore.CYAN + f"{'Path':<{col_width}} Status")
+    click.echo(Fore.WHITE + '-'*(col_width + len(' Status')))
     for path, status in results:
         color = Fore.GREEN if status < 400 else Fore.RED
-        click.echo(color + f"{path:<40} {status}")
+        click.echo(color + f"{path:<{col_width}} {status}")
     click.echo('\n')
 
 if __name__ == '__main__':
