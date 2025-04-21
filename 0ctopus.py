@@ -1,11 +1,16 @@
-# Archivo: 0ctopus.py
 #!/usr/bin/env python3
+# Archivo: 0ctopus.py
+
 import os
 import click
 from colorama import init, Fore, Style
 from datetime import datetime
 from config import HOST, URL_BASE
 from tools.portscanner import scan as portscan
+from tools.dirb import crawl_links
+from tools.subdomain_enum import enumerate as enumerate_subdomains
+from tools.vuln_check import check as vuln_check
+from tools.packet_sniffer import sniff_packets
 
 # Inicializa colorama
 init(autoreset=True)
@@ -31,79 +36,135 @@ def scan_ports():
     """Escaneo avanzado de puertos con detección de servicios y guarda resultado en /output"""
     resultados = portscan(common=True)
     total = len(resultados)
-    abiertos = [r for r in resultados if r["state"] == "open"]
-    filtrados = [r for r in resultados if r["state"] == "filtered"]
+    abiertos = [r for r in resultados if r['state']=='open']
+    filtrados = [r for r in resultados if r['state']=='filtered']
 
-    # Preparar directorio y archivo de salida sin timestamp para reemplazar siempre
-    output_dir = 'output'
-    os.makedirs(output_dir, exist_ok=True)
-    filename = os.path.join(output_dir, f'port_scan-{HOST}.txt')
+    # Carpeta y archivo de salida
+    os.makedirs('output', exist_ok=True)
+    filename = os.path.join('output', f'port_scan-{HOST}.txt')
 
-    # Construir contenido para archivo
-    lines = []
-    lines.append('ESCANEO DE PUERTOS AVANZADO')
-    lines.append(f'Target: {HOST}')
-    lines.append(f'Inicio: {datetime.now().strftime("%d/%m/%Y %H:%M:%S")}')
-    lines.append(f'Total puertos: {total} (Abiertos: {len(abiertos)}, Filtrados: {len(filtrados)})')
-    lines.append('')
+    # Preparar contenido para txt
+    header = [
+        'ESCANEO DE PUERTOS AVANZADO',
+        f'Target: {HOST}',
+        f'Inicio: {datetime.now().strftime("%d/%m/%Y %H:%M:%S")}',
+        f'Total: {total}  Abiertos: {len(abiertos)}  Filtrados: {len(filtrados)}',
+        ''
+    ]
+    table = [
+        f"{'Puerto':<8} {'Estado':<10} {'Servicio':<20} Versión",
+        '-'*60
+    ]
+    for item in resultados:
+        port = f"{item['port']:<8}"
+        state = 'ABIERTO' if item['state']=='open' else 'FILTRADO'
+        service = f"{item['service'] or '-':<20}"
+        version = item['version'] or '-'
+        table.append(f"{port} {state:<10} {service} {version}")
 
-    def table_lines(data, title):
-        tbl = []
-        tbl.append(title)
-        tbl.append(f"{'Puerto':<8}{'Estado':<12}{'Servicio':<20}{'Versión'}")
-        tbl.append('-' * 60)
-        for item in data:
-            port = f"{item['port']:<8}"
-            state = 'ABIERTO' if item['state']=='open' else 'FILTRADO'
-            service = item['service']
-            version = item['version']
-            tbl.append(f"{port}{state:<12}{service:<20}{version}")
-        tbl.append('')
-        return tbl
+    # Guardar txt
+    with open(filename, 'w', encoding='utf-8') as f:
+        f.write('\n'.join(header + table))
 
-    lines += table_lines(abiertos, 'PUERTOS ABIERTOS')
-    lines += table_lines(filtrados, 'PUERTOS FILTRADOS')
+    # Mostrar en consola
+    click.echo(Fore.CYAN + '\n' + '═'*60)
+    click.echo(Fore.YELLOW + '🔥 ESCANEO DE PUERTOS AVANZADO'.center(60))
+    click.echo(Fore.CYAN + '═'*60)
+    click.echo(Fore.GREEN + header[1])
+    click.echo(Fore.BLUE + header[2])
+    click.echo(Fore.MAGENTA + header[3] + '\n')
+    click.echo(Fore.CYAN + table[0])
+    click.echo(Fore.WHITE + table[1])
+    for row in table[2:]:
+        color = Fore.GREEN if 'ABIERTO' in row else Fore.YELLOW
+        click.echo(color + row)
+    click.echo('\n')
 
-    # Escribir o sobrescribir archivo de salida
+@cli.command(name='vuln-check')
+def vuln_check_cmd():
+    """Chequeo rápido de vulnerabilidades en HOST y guarda resultado en /output"""
+    issues = vuln_check(URL_BASE)
+    # Carpeta y archivo
+    os.makedirs('output', exist_ok=True)
+    filename = os.path.join('output', f'vuln_check-{HOST}.txt')
+
+    # Preparar contenido
+    header = [
+        'CHEQUEO DE VULNERABILIDADES',
+        f'Target: {HOST}',
+        f'Inicio: {datetime.now().strftime("%d/%m/%Y %H:%M:%S")}',
+        ''
+    ]
+    lines = header + issues
+
+    # Guardar txt
     with open(filename, 'w', encoding='utf-8') as f:
         f.write('\n'.join(lines))
 
-    # Imprimir en pantalla
-    click.echo(Fore.CYAN + '\n' + '═' * 60)
-    click.echo(Fore.YELLOW + '🔥 ESCANEO DE PUERTOS AVANZADO'.center(60))
-    click.echo(Fore.CYAN + '═' * 60)
-    click.echo(Fore.GREEN + f"🔗 Target: {HOST}")
-    click.echo(Fore.BLUE + f"🕒 Inicio: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}")
-    click.echo(Fore.MAGENTA + f"📊 Total puertos: {total}")
-    click.echo(Fore.GREEN + f"✅ Abiertos: {len(abiertos)}" + Fore.RED + f"   🚫 Filtrados: {len(filtrados)}\n")
+    # Mostrar en consola
+    click.echo(Fore.CYAN + '\n' + '═'*60)
+    click.echo(Fore.YELLOW + '🔒 CHEQUEO DE VULNERABILIDADES'.center(60))
+    click.echo(Fore.CYAN + '═'*60)
+    click.echo(Fore.GREEN + header[1])
+    click.echo(Fore.BLUE + header[2] + '\n')
+    for issue in issues:
+        click.echo(Fore.RED + f"- {issue}")
+    click.echo('\n')
 
-    def print_table(data, title, is_open):
-        if not data:
-            return
-        click.echo((Fore.GREEN if is_open else Fore.YELLOW) + f"\n{title.center(60, '─')}" + Style.RESET_ALL)
-        click.echo(Fore.CYAN + f"{'Puerto':<8}{'Estado':<12}{'Servicio':<20}{'Versión'}")
-        click.echo(Fore.WHITE + '-' * 60)
-        for item in data:
-            port_text = f"{item['port']:<8}"
-            state_text = 'ABIERTO' if item['state']=='open' else 'FILTRADO'
-            state_col = f"{state_text:<12}"
-            service_col = f"{item['service']:<20}"
-            version_col = f"{item['version']}"
-            click.echo(
-                Fore.CYAN + port_text +
-                (Fore.GREEN if item['state']=='open' else Fore.YELLOW) + state_col +
-                Style.RESET_ALL + Fore.BLUE + service_col + Fore.WHITE + version_col
-            )
-        click.echo('')
+@cli.command()
+def enum_subdomains():
+    """Enumera subdominios de HOST definido en config.py y guarda resultado en /output"""
+    encontrados = enumerate_subdomains(domain=HOST)
+    os.makedirs('output', exist_ok=True)
+    filename = os.path.join('output', f'subdomains-{HOST}.txt')
+    header = [
+        'ENUMERACIÓN DE SUBDOMINIOS',
+        f'Target: {HOST}',
+        f'Inicio: {datetime.now().strftime("%d/%m/%Y %H:%M:%S")}',
+        f'Total: {len(encontrados)}',
+        ''
+    ]
+    with open(filename, 'w', encoding='utf-8') as f:
+        f.write('\n'.join(header + encontrados))
+    click.echo(Fore.CYAN + '\n' + '═'*60)
+    click.echo(Fore.YELLOW + '🔍 ENUMERACIÓN DE SUBDOMINIOS'.center(60))
+    click.echo(Fore.CYAN + '═'*60)
+    click.echo(Fore.GREEN + header[1])
+    click.echo(Fore.BLUE + header[2] + '\n')
+    for sub in encontrados:
+        click.echo(Fore.CYAN + f"- {sub}")
+    click.echo('\n')
 
-    print_table(abiertos, 'PUERTOS ABIERTOS', True)
-    print_table(filtrados, 'PUERTOS FILTRADOS', False)
-
-    click.echo(Fore.CYAN + '═' * 60)
-    click.echo(Fore.GREEN + f"🎯 Escaneo completado: {datetime.now().strftime('%H:%M:%S')}".center(60))
-    click.echo(Fore.CYAN + '═' * 60 + '\n')
-
-# Puedes agregar aquí otros comandos (enum_subdomains, dirb_scan, vuln_check, sniff, etc.)
+@cli.command(name='dirb')
+@click.option('--max-depth', default=2, help='Profundidad máxima de crawling')
+@click.option('--verbose', is_flag=True, help='Mostrar detalles en consola')
+def dirb(max_depth, verbose):
+    """Crawling de directorios internos y guarda resultado en /output"""
+    results = crawl_links(URL_BASE, max_depth=max_depth, max_workers=10, verbose=verbose)
+    total = len(results)
+    os.makedirs('output', exist_ok=True)
+    filename = os.path.join('output', f'dirb_scan-{HOST}.txt')
+    header = [
+        'CRAWLING DE DIRECTORIOS AVANZADO',
+        f'Target: {HOST}',
+        f'Inicio: {datetime.now().strftime("%d/%m/%Y %H:%M:%S")}',
+        f'Total: {total}',
+        ''
+    ]
+    rows = [f"{path:<40} {status}" for path, status in results]
+    with open(filename, 'w', encoding='utf-8') as f:
+        f.write('\n'.join(header + rows))
+    click.echo(Fore.CYAN + '\n' + '═'*60)
+    click.echo(Fore.YELLOW + '🔥 CRAWLING DE DIRECTORIOS AVANZADO'.center(60))
+    click.echo(Fore.CYAN + '═'*60)
+    click.echo(Fore.GREEN + header[1])
+    click.echo(Fore.BLUE + header[2] + '\n')
+    click.echo(Fore.CYAN + f"{'Path':<40} Status")
+    click.echo(Fore.WHITE + '-'*60)
+    for path, status in results:
+        color = Fore.GREEN if status < 400 else Fore.RED
+        click.echo(color + f"{path:<40} {status}")
+    click.echo('\n')
 
 if __name__ == '__main__':
     cli()
