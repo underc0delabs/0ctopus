@@ -1,0 +1,13 @@
+# Entorno virtual de Python
+env/
+venv/
+.venv/
+
+# Archivos compilados de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Logs, salidas y carpetas de sistema
+*.log
+output/
