@@ -12,7 +12,7 @@ from tools.portscanner import scan as portscan
 from tools.dirb import crawl_links
 from tools.subdomain_enum import enumerate as enum_subdomains_tool
 from tools.vuln_check import check as vuln_check
-from tools.packet_sniffer import sniff_packets
+from tools.packet_sniffer import sniff_packets, save_pcap
 
 # Inicializa colorama
 def init_color():
@@ -154,15 +154,14 @@ def dirb(max_depth, verbose):
     click.echo('\n')
 
 @cli.command(name='sniff-packets')
-def sniff_packets_cmd():
-    """Captura paquetes de red en la interfaz definida y guarda resultado en /output"""
-    packets = sniff_packets()
-    os.makedirs('output', exist_ok=True)
-    filename = os.path.join('output', f'packets-{HOST}.pcap')
-    # Implementación de guardado según sniff_packets
-    with open(filename, 'wb') as f:
-        f.write(packets)
-    click.echo(Fore.GREEN + f"Paquetes capturados en {filename}")
+@click.option('--interface', default=None, help='Interfaz a capturar (por defecto todas)')
+@click.option('--count', default=0, type=int, help='Número de paquetes (0=ilimitado)')
+@click.option('--timeout', default=10, type=int, help='Tiempo de captura en segundos')
+def sniff_packets_cmd(interface, count, timeout):
+    """Captura paquetes de red y guarda PCAP en /output"""
+    data = sniff_packets(interface=interface, count=count, timeout=timeout)
+    filepath = save_pcap(data)
+    click.echo(Fore.GREEN + f"Paquetes capturados en {filepath}")
 
 
 def show_menu():

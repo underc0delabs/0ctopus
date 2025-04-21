@@ -28,12 +28,16 @@
    ```bash
    python3 -m venv env
    source env/bin/activate    # Linux/macOS
-   env\Scripts\activate     # Windows
+   env\\Scripts\\activate     # Windows
    ```
 3. Instalar dependencias:
    ```bash
    pip install -r requirements.txt
    ```
+
+**Requisitos adicionales en Windows**:
+- Instalar **Npcap** en modo "WinPcap Compatible Mode" desde https://nmap.org/npcap
+- Ejecutar la terminal **como Administrador** para permitir la captura de paquetes.
 
 ---
 
@@ -97,5 +101,4 @@ Este proyecto está bajo licencia MIT. Consulta el archivo [LICENSE](LICENSE) pa
 
 ---
 
-> Desarrollado por Underc0de Labs.
-
+> Desarrollado por Underc0de.
