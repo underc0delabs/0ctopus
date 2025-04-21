@@ -13,6 +13,7 @@ from tools.dirb import crawl_links
 from tools.subdomain_enum import enumerate as enum_subdomains_tool
 from tools.vuln_check import check as vuln_check
 from tools.packet_sniffer import sniff_packets, save_pcap
+from tools.ip_geolocator import cmd_geoip
 
 # Inicializa colorama
 def init_color():
@@ -34,6 +35,9 @@ def cli():
     """0ctopus: Navaja Suiza de seguridad informática"""
     init_color()
     click.echo(Fore.GREEN + BANNER)
+
+# Registrar comando geoip
+cli.add_command(cmd_geoip)
 
 @cli.command(name='scan-ports')
 def scan_ports():
@@ -173,6 +177,7 @@ def show_menu():
         ('3', 'enum-subdomains'),
         ('4', 'dirb'),
         ('5', 'sniff-packets'),
+        ('6', 'geoip'),
         ('0', 'Salir')
     ]
     click.echo(Fore.CYAN + "Menú de herramientas disponibles:")
@@ -183,7 +188,12 @@ def show_menu():
         sys.exit(0)
     for key, cmd in options:
         if choice == key and cmd != 'Salir':
-            subprocess.call([sys.executable, sys.argv[0], cmd])
+            # Si la opción es geoip, pedimos la IP antes
+            if cmd == 'geoip':
+                ip = click.prompt(Fore.MAGENTA + "Ingresa la IP a geolocalizar")
+                subprocess.call([sys.executable, sys.argv[0], cmd, ip])
+            else:
+                subprocess.call([sys.executable, sys.argv[0], cmd])
             return
     click.echo(Fore.RED + "Opción inválida. Saliendo.")
 
