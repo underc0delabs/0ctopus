@@ -8,7 +8,7 @@ from datetime import datetime
 from config import HOST, URL_BASE
 from tools.portscanner import scan as portscan
 from tools.dirb import crawl_links
-from tools.subdomain_enum import enumerate as enumerate_subdomains
+from tools.subdomain_enum import enumerate as enum_subdomains
 from tools.vuln_check import check as vuln_check
 from tools.packet_sniffer import sniff_packets
 
@@ -39,11 +39,9 @@ def scan_ports():
     abiertos = [r for r in resultados if r['state']=='open']
     filtrados = [r for r in resultados if r['state']=='filtered']
 
-    # Carpeta y archivo de salida
     os.makedirs('output', exist_ok=True)
     filename = os.path.join('output', f'port_scan-{HOST}.txt')
 
-    # Preparar contenido para txt
     header = [
         'ESCANEO DE PUERTOS AVANZADO',
         f'Target: {HOST}',
@@ -62,11 +60,9 @@ def scan_ports():
         version = item['version'] or '-'
         table.append(f"{port} {state:<10} {service} {version}")
 
-    # Guardar txt
     with open(filename, 'w', encoding='utf-8') as f:
         f.write('\n'.join(header + table))
 
-    # Mostrar en consola
     click.echo(Fore.CYAN + '\n' + '═'*60)
     click.echo(Fore.YELLOW + '🔥 ESCANEO DE PUERTOS AVANZADO'.center(60))
     click.echo(Fore.CYAN + '═'*60)
@@ -82,39 +78,22 @@ def scan_ports():
 
 @cli.command(name='vuln-check')
 def vuln_check_cmd():
-    """Chequeo rápido de vulnerabilidades en HOST y guarda resultado en /output"""
-    issues = vuln_check(URL_BASE)
-    # Carpeta y archivo
+    """Chequeo rápido de vulnerabilidades en HOST y sus subdominios; guarda resultado en /output"""
+    # Ejecutar check, que retorna un string formateado
+    report = vuln_check(URL_BASE)
+
     os.makedirs('output', exist_ok=True)
     filename = os.path.join('output', f'vuln_check-{HOST}.txt')
-
-    # Preparar contenido
-    header = [
-        'CHEQUEO DE VULNERABILIDADES',
-        f'Target: {HOST}',
-        f'Inicio: {datetime.now().strftime("%d/%m/%Y %H:%M:%S")}',
-        ''
-    ]
-    lines = header + issues
-
-    # Guardar txt
     with open(filename, 'w', encoding='utf-8') as f:
-        f.write('\n'.join(lines))
+        f.write(report)
 
-    # Mostrar en consola
-    click.echo(Fore.CYAN + '\n' + '═'*60)
-    click.echo(Fore.YELLOW + '🔒 CHEQUEO DE VULNERABILIDADES'.center(60))
-    click.echo(Fore.CYAN + '═'*60)
-    click.echo(Fore.GREEN + header[1])
-    click.echo(Fore.BLUE + header[2] + '\n')
-    for issue in issues:
-        click.echo(Fore.RED + f"- {issue}")
-    click.echo('\n')
+    # Mostrar reporte en consola
+    click.echo(report)
 
 @cli.command()
 def enum_subdomains():
     """Enumera subdominios de HOST definido en config.py y guarda resultado en /output"""
-    encontrados = enumerate_subdomains(domain=HOST)
+    encontrados = enum_subdomains(domain=HOST)
     os.makedirs('output', exist_ok=True)
     filename = os.path.join('output', f'subdomains-{HOST}.txt')
     header = [
