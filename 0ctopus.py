@@ -5,9 +5,10 @@ import os
 import sys
 import subprocess
 import click
-from colorama import init, Fore, Style
+from colorama import init, Fore
 from datetime import datetime
 from config import HOST, URL_BASE
+
 from tools.portscanner import scan as portscan
 from tools.dirb import crawl_links
 from tools.subdomain_enum import enumerate as enum_subdomains_tool
@@ -16,6 +17,7 @@ from tools.packet_sniffer import sniff_packets, save_pcap
 from tools.ip_geolocator import cmd_geoip
 from tools.whois_lookup import cmd_whois
 from tools.admin_finder import cmd_find_admin
+from tools.wifi_scanner import cmd_wifi_scan
 
 # Inicializa colorama
 def init_color():
@@ -42,13 +44,14 @@ def cli():
 cli.add_command(cmd_geoip)
 cli.add_command(cmd_whois)
 cli.add_command(cmd_find_admin)
+cli.add_command(cmd_wifi_scan)
 
 @cli.command(name='scan-ports')
 def scan_ports():
     """Escaneo avanzado de puertos con detección de servicios y guarda resultado en /output"""
     resultados = portscan(common=True)
-    abiertos = [r for r in resultados if r['state'] == 'open']
-    filtrados = [r for r in resultados if r['state'] == 'filtered']
+    abiertos = [r for r in resultados if r['state']=='open']
+    filtrados = [r for r in resultados if r['state']=='filtered']
 
     os.makedirs('output', exist_ok=True)
     filename = os.path.join('output', f'port_scan-{HOST}.txt')
@@ -62,7 +65,7 @@ def scan_ports():
     table = [f"{'Puerto':<8} {'Estado':<10} {'Servicio':<20} Versión", '-'*60]
     for item in resultados:
         port = f"{item['port']:<8}"
-        state = 'ABIERTO' if item['state'] == 'open' else 'FILTRADO'
+        state = 'ABIERTO' if item['state']=='open' else 'FILTRADO'
         service = f"{item['service'] or '-':<20}"
         version = item['version'] or '-'
         table.append(f"{port} {state:<10} {service} {version}")
@@ -169,6 +172,7 @@ def show_menu():
         ('6','geoip'),
         ('7','whois'),
         ('8','find-admin'),
+        ('9','wifi-scan'),
         ('0','Salir')
     ]
     click.echo(Fore.CYAN + "Menú de herramientas disponibles:")
@@ -188,6 +192,8 @@ def show_menu():
             elif cmd=='find-admin':
                 base = click.prompt(Fore.MAGENTA + "Ingresa la URL base (ej: https://site.com)")
                 subprocess.call([sys.executable, sys.argv[0], cmd, base])
+            elif cmd=='wifi-scan':
+                subprocess.call([sys.executable, sys.argv[0], cmd])
             else:
                 subprocess.call([sys.executable, sys.argv[0], cmd])
             return
