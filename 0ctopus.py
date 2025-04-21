@@ -2,6 +2,8 @@
 # Archivo: 0ctopus.py
 
 import os
+import sys
+import subprocess
 import click
 from colorama import init, Fore, Style
 from datetime import datetime
@@ -33,13 +35,13 @@ def cli():
     init_color()
     click.echo(Fore.GREEN + BANNER)
 
-@cli.command()
+@cli.command(name='scan-ports')
 def scan_ports():
     """Escaneo avanzado de puertos con detección de servicios y guarda resultado en /output"""
     resultados = portscan(common=True)
     total = len(resultados)
-    abiertos = [r for r in resultados if r['state']=='open']
-    filtrados = [r for r in resultados if r['state']=='filtered']
+    abiertos = [r for r in resultados if r['state'] == 'open']
+    filtrados = [r for r in resultados if r['state'] == 'filtered']
 
     os.makedirs('output', exist_ok=True)
     filename = os.path.join('output', f'port_scan-{HOST}.txt')
@@ -53,11 +55,11 @@ def scan_ports():
     ]
     table = [
         f"{'Puerto':<8} {'Estado':<10} {'Servicio':<20} Versión",
-        '-'*60
+        '-' * 60
     ]
     for item in resultados:
         port = f"{item['port']:<8}"
-        state = 'ABIERTO' if item['state']=='open' else 'FILTRADO'
+        state = 'ABIERTO' if item['state'] == 'open' else 'FILTRADO'
         service = f"{item['service'] or '-':<20}"
         version = item['version'] or '-'
         table.append(f"{port} {state:<10} {service} {version}")
@@ -65,9 +67,9 @@ def scan_ports():
     with open(filename, 'w', encoding='utf-8') as f:
         f.write('\n'.join(header + table))
 
-    click.echo(Fore.CYAN + '\n' + '═'*60)
+    click.echo(Fore.CYAN + '\n' + '═' * 60)
     click.echo(Fore.YELLOW + '🔥 ESCANEO DE PUERTOS AVANZADO'.center(60))
-    click.echo(Fore.CYAN + '═'*60)
+    click.echo(Fore.CYAN + '═' * 60)
     click.echo(Fore.GREEN + header[1])
     click.echo(Fore.BLUE + header[2])
     click.echo(Fore.MAGENTA + header[3] + '\n')
@@ -106,16 +108,16 @@ def cmd_enum_subdomains():
     ]
     with open(filename, 'w', encoding='utf-8') as f:
         f.write('\n'.join(header + encontrados))
-    click.echo(Fore.CYAN + '\n' + '═'*60)
+    click.echo(Fore.CYAN + '\n' + '═' * 60)
     click.echo(Fore.YELLOW + '🔍 ENUMERACIÓN DE SUBDOMINIOS'.center(60))
-    click.echo(Fore.CYAN + '═'*60)
+    click.echo(Fore.CYAN + '═' * 60)
     click.echo(Fore.GREEN + header[1])
     click.echo(Fore.BLUE + header[2] + '\n')
     for sub in encontrados:
         click.echo(Fore.CYAN + f"- {sub}")
     click.echo('\n')
 
-@cli.command()
+@cli.command(name='dirb')
 @click.option('--max-depth', default=2, help='Profundidad máxima de crawling')
 @click.option('--verbose', is_flag=True, help='Mostrar detalles en consola')
 def dirb(max_depth, verbose):
@@ -141,15 +143,53 @@ def dirb(max_depth, verbose):
         f.write('\n'.join(header + rows))
 
     # Impresión en consola con columnas alineadas
-    click.echo(Fore.CYAN + '\n' + '═'*(col_width + 8))
+    click.echo(Fore.CYAN + '\n' + '═' * (col_width + 8))
     click.echo(Fore.YELLOW + '🔥 CRAWLING DE DIRECTORIOS AVANZADO'.center(col_width + 8))
-    click.echo(Fore.CYAN + '═'*(col_width + 8))
+    click.echo(Fore.CYAN + '═' * (col_width + 8))
     click.echo(Fore.CYAN + f"{'Path':<{col_width}} Status")
-    click.echo(Fore.WHITE + '-'*(col_width + len(' Status')))
+    click.echo(Fore.WHITE + '-' * (col_width + len(' Status')))
     for path, status in results:
         color = Fore.GREEN if status < 400 else Fore.RED
         click.echo(color + f"{path:<{col_width}} {status}")
     click.echo('\n')
 
+@cli.command(name='sniff-packets')
+def sniff_packets_cmd():
+    """Captura paquetes de red en la interfaz definida y guarda resultado en /output"""
+    packets = sniff_packets()
+    os.makedirs('output', exist_ok=True)
+    filename = os.path.join('output', f'packets-{HOST}.pcap')
+    # Implementación de guardado según sniff_packets
+    with open(filename, 'wb') as f:
+        f.write(packets)
+    click.echo(Fore.GREEN + f"Paquetes capturados en {filename}")
+
+
+def show_menu():
+    init_color()
+    click.echo(Fore.GREEN + BANNER)
+    options = [
+        ('1', 'scan-ports'),
+        ('2', 'vuln-check'),
+        ('3', 'enum-subdomains'),
+        ('4', 'dirb'),
+        ('5', 'sniff-packets'),
+        ('0', 'Salir')
+    ]
+    click.echo(Fore.CYAN + "Menú de herramientas disponibles:")
+    for key, cmd in options:
+        click.echo(Fore.YELLOW + f"  {key}. {cmd}")
+    choice = click.prompt(Fore.MAGENTA + "Selecciona una opción", default='0')
+    if choice == '0':
+        sys.exit(0)
+    for key, cmd in options:
+        if choice == key and cmd != 'Salir':
+            subprocess.call([sys.executable, sys.argv[0], cmd])
+            return
+    click.echo(Fore.RED + "Opción inválida. Saliendo.")
+
 if __name__ == '__main__':
-    cli()
+    if len(sys.argv) == 1:
+        show_menu()
+    else:
+        cli()
