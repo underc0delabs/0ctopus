@@ -5,7 +5,7 @@ import os
 import sys
 import subprocess
 import click
-from colorama import init, Fore
+from colorama import init, Fore, Style
 from datetime import datetime
 from config import HOST, URL_BASE
 
@@ -18,12 +18,13 @@ from tools.ip_geolocator import cmd_geoip
 from tools.whois_lookup import cmd_whois
 from tools.admin_finder import cmd_find_admin
 from tools.wifi_scanner import cmd_wifi_scan
+from tools.wifi_handshake import cmd_wifi_handshake
 
 # Inicializa colorama
 def init_color():
     init(autoreset=True)
 
-# Banner ASCII estático
+# Banner ASCII
 BANNER = r"""
  ██████╗  ██████╗████████╗ ██████╗ ██████╗ ██╗   ██╗███████╗
 ██╔═████╗██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗██║   ██║██╔════╝
@@ -45,13 +46,14 @@ cli.add_command(cmd_geoip)
 cli.add_command(cmd_whois)
 cli.add_command(cmd_find_admin)
 cli.add_command(cmd_wifi_scan)
+cli.add_command(cmd_wifi_handshake)
 
 @cli.command(name='scan-ports')
 def scan_ports():
     """Escaneo avanzado de puertos con detección de servicios y guarda resultado en /output"""
     resultados = portscan(common=True)
-    abiertos = [r for r in resultados if r['state']=='open']
-    filtrados = [r for r in resultados if r['state']=='filtered']
+    abiertos   = [r for r in resultados if r['state']=='open']
+    filtrados  = [r for r in resultados if r['state']=='filtered']
 
     os.makedirs('output', exist_ok=True)
     filename = os.path.join('output', f'port_scan-{HOST}.txt')
@@ -64,8 +66,8 @@ def scan_ports():
     ]
     table = [f"{'Puerto':<8} {'Estado':<10} {'Servicio':<20} Versión", '-'*60]
     for item in resultados:
-        port = f"{item['port']:<8}"
-        state = 'ABIERTO' if item['state']=='open' else 'FILTRADO'
+        port    = f"{item['port']:<8}"
+        state   = 'ABIERTO' if item['state']=='open' else 'FILTRADO'
         service = f"{item['service'] or '-':<20}"
         version = item['version'] or '-'
         table.append(f"{port} {state:<10} {service} {version}")
@@ -84,7 +86,7 @@ def scan_ports():
     for row in table[2:]:
         color = Fore.GREEN if 'ABIERTO' in row else Fore.YELLOW
         click.echo(color + row)
-    click.echo('\n')
+    click.echo()
 
 @cli.command(name='vuln-check')
 def vuln_check_cmd():
@@ -111,6 +113,7 @@ def cmd_enum_subdomains():
     ]
     with open(filename, 'w', encoding='utf-8') as f:
         f.write('\n'.join(header + encontrados))
+
     click.echo(Fore.CYAN + '\n' + '═'*60)
     click.echo(Fore.YELLOW + '🔍 ENUMERACIÓN DE SUBDOMINIOS'.center(60))
     click.echo(Fore.CYAN + '═'*60)
@@ -118,7 +121,7 @@ def cmd_enum_subdomains():
     click.echo(Fore.BLUE + header[2] + '\n')
     for sub in encontrados:
         click.echo(Fore.CYAN + f"- {sub}")
-    click.echo('\n')
+    click.echo()
 
 @cli.command(name='dirb')
 @click.option('--max-depth', default=2, help='Profundidad máxima de crawling')
@@ -126,8 +129,9 @@ def cmd_enum_subdomains():
 def dirb(max_depth, verbose):
     """Crawling de directorios internos y guarda resultado en /output"""
     results = crawl_links(URL_BASE, max_depth=max_depth, verbose=verbose)
-    max_path_len = max((len(path) for path,_ in results), default=len('Path'))
-    col_width = max(max_path_len, len('Path')) + 2
+    max_len  = max((len(p) for p,_ in results), default=len('Path'))
+    col_w    = max(max_len, len('Path')) + 2
+
     os.makedirs('output', exist_ok=True)
     filename = os.path.join('output', f'dirb_scan-{HOST}.txt')
     header = [
@@ -137,18 +141,19 @@ def dirb(max_depth, verbose):
         f'Total: {len(results)}',
         ''
     ]
-    rows = [f"{path:<{col_width}} {status}" for path,status in results]
+    rows = [f"{p:<{col_w}} {s}" for p,s in results]
     with open(filename, 'w', encoding='utf-8') as f:
         f.write('\n'.join(header + rows))
-    click.echo(Fore.CYAN + '\n' + '═'*(col_width+8))
-    click.echo(Fore.YELLOW + '🔥 CRAWLING DE DIRECTORIOS AVANZADO'.center(col_width+8))
-    click.echo(Fore.CYAN + '═'*(col_width+8))
-    click.echo(Fore.CYAN + f"{'Path':<{col_width}} Status")
-    click.echo(Fore.WHITE + '-'*(col_width+len(' Status')))
-    for path,status in results:
-        color = Fore.GREEN if status<400 else Fore.RED
-        click.echo(color + f"{path:<{col_width}} {status}")
-    click.echo('\n')
+
+    click.echo(Fore.CYAN + '\n' + '═'*(col_w+8))
+    click.echo(Fore.YELLOW + '🔥 CRAWLING DE DIRECTORIOS AVANZADO'.center(col_w+8))
+    click.echo(Fore.CYAN + '═'*(col_w+8))
+    click.echo(Fore.CYAN + f"{'Path':<{col_w}} Status")
+    click.echo(Fore.WHITE + '-'*(col_w+len(' Status')))
+    for p,s in results:
+        color = Fore.GREEN if s<400 else Fore.RED
+        click.echo(color + f"{p:<{col_w}} {s}")
+    click.echo()
 
 @cli.command(name='sniff-packets')
 @click.option('--interface', default=None, help='Interfaz a capturar')
@@ -156,7 +161,7 @@ def dirb(max_depth, verbose):
 @click.option('--timeout', default=10, type=int, help='Tiempo de captura en segundos')
 def sniff_packets_cmd(interface, count, timeout):
     """Captura paquetes de red y guarda PCAP en /output"""
-    data = sniff_packets(interface=interface, count=count, timeout=timeout)
+    data     = sniff_packets(interface=interface, count=count, timeout=timeout)
     filepath = save_pcap(data)
     click.echo(Fore.GREEN + f"Paquetes capturados en {filepath}")
 
@@ -164,43 +169,53 @@ def show_menu():
     init_color()
     click.echo(Fore.GREEN + BANNER)
     options = [
-        ('1','scan-ports'),
-        ('2','vuln-check'),
-        ('3','enum-subdomains'),
-        ('4','dirb'),
-        ('5','sniff-packets'),
-        ('6','geoip'),
-        ('7','whois'),
-        ('8','find-admin'),
-        ('9','wifi-scan'),
-        ('0','Salir')
+        ('1', 'scan-ports'),
+        ('2', 'vuln-check'),
+        ('3', 'enum-subdomains'),
+        ('4', 'dirb'),
+        ('5', 'sniff-packets'),
+        ('6', 'geoip'),
+        ('7', 'whois'),
+        ('8', 'find-admin'),
+        ('9', 'wifi-scan'),
+        ('10','wifi-handshake'),
+        ('0', 'Salir'),
     ]
     click.echo(Fore.CYAN + "Menú de herramientas disponibles:")
-    for key,cmd in options:
+    for key, cmd in options:
         click.echo(Fore.YELLOW + f"  {key}. {cmd}")
     choice = click.prompt(Fore.MAGENTA + "Selecciona una opción", default='0')
-    if choice=='0':
+
+    if choice == '0':
         sys.exit(0)
-    for key,cmd in options:
-        if choice==key and cmd!='Salir':
-            if cmd=='geoip':
-                ip = click.prompt(Fore.MAGENTA + "Ingresa la IP a geolocalizar")
-                subprocess.call([sys.executable, sys.argv[0], cmd, ip])
-            elif cmd=='whois':
-                domain = click.prompt(Fore.MAGENTA + "Ingresa el dominio para WHOIS")
-                subprocess.call([sys.executable, sys.argv[0], cmd, domain])
-            elif cmd=='find-admin':
-                base = click.prompt(Fore.MAGENTA + "Ingresa la URL base (ej: https://site.com)")
-                subprocess.call([sys.executable, sys.argv[0], cmd, base])
-            elif cmd=='wifi-scan':
-                subprocess.call([sys.executable, sys.argv[0], cmd])
-            else:
-                subprocess.call([sys.executable, sys.argv[0], cmd])
-            return
-    click.echo(Fore.RED + "Opción inválida. Saliendo.")
+
+    # Mapea opción numérica a subcomando
+    mapping = {k: cmd for k, cmd in options}
+    cmd = mapping.get(choice)
+    if not cmd:
+        click.echo(Fore.RED + "Opción inválida. Saliendo.")
+        sys.exit(1)
+
+    # Ejecuta subcomando
+    if cmd in ('geoip', 'whois', 'find-admin'):
+        arg = click.prompt(Fore.MAGENTA + {
+            'geoip': "Ingresa la IP a geolocalizar",
+            'whois': "Ingresa el dominio para WHOIS",
+            'find-admin': "Ingresa la URL base (ej: https://site.com)"
+        }[cmd])
+        subprocess.call([sys.executable, sys.argv[0], cmd, arg])
+
+    elif cmd == 'wifi-scan':
+        subprocess.call([sys.executable, sys.argv[0], cmd])
+
+    elif cmd == 'wifi-handshake':
+        subprocess.call([sys.executable, sys.argv[0], cmd])
+
+    else:
+        subprocess.call([sys.executable, sys.argv[0], cmd])
 
 if __name__ == '__main__':
-    if len(sys.argv)==1:
+    if len(sys.argv) == 1:
         show_menu()
     else:
         cli()
