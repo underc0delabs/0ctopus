@@ -19,6 +19,7 @@ from tools.whois_lookup import cmd_whois
 from tools.admin_finder import cmd_find_admin
 from tools.wifi_scanner import cmd_wifi_scan
 from tools.wifi_handshake import cmd_wifi_handshake
+from tools.handshake_crack import cmd_wifi_crack
 
 # Inicializa colorama
 def init_color():
@@ -41,12 +42,13 @@ def cli():
     init_color()
     click.echo(Fore.GREEN + BANNER)
 
-# Registrar comandos externos
-cli.add_command(cmd_geoip)
-cli.add_command(cmd_whois)
-cli.add_command(cmd_find_admin)
-cli.add_command(cmd_wifi_scan)
-cli.add_command(cmd_wifi_handshake)
+# Registrar todos los comandos
+cli.add_command(cmd_geoip, name='geoip')
+cli.add_command(cmd_whois, name='whois')
+cli.add_command(cmd_find_admin, name='find-admin')
+cli.add_command(cmd_wifi_scan, name='wifi-scan')
+cli.add_command(cmd_wifi_handshake, name='wifi-handshake')
+cli.add_command(cmd_wifi_crack, name='wifi-crack')
 
 @cli.command(name='scan-ports')
 def scan_ports():
@@ -179,6 +181,7 @@ def show_menu():
         ('8', 'find-admin'),
         ('9', 'wifi-scan'),
         ('10','wifi-handshake'),
+        ('11','wifi-crack'),
         ('0', 'Salir'),
     ]
     click.echo(Fore.CYAN + "Menú de herramientas disponibles:")
@@ -189,26 +192,23 @@ def show_menu():
     if choice == '0':
         sys.exit(0)
 
-    # Mapea opción numérica a subcomando
     mapping = {k: cmd for k, cmd in options}
     cmd = mapping.get(choice)
     if not cmd:
         click.echo(Fore.RED + "Opción inválida. Saliendo.")
         sys.exit(1)
 
-    # Ejecuta subcomando
+    # ejecución según comando
     if cmd in ('geoip', 'whois', 'find-admin'):
-        arg = click.prompt(Fore.MAGENTA + {
+        prompts = {
             'geoip': "Ingresa la IP a geolocalizar",
             'whois': "Ingresa el dominio para WHOIS",
             'find-admin': "Ingresa la URL base (ej: https://site.com)"
-        }[cmd])
+        }
+        arg = click.prompt(Fore.MAGENTA + prompts[cmd])
         subprocess.call([sys.executable, sys.argv[0], cmd, arg])
 
-    elif cmd == 'wifi-scan':
-        subprocess.call([sys.executable, sys.argv[0], cmd])
-
-    elif cmd == 'wifi-handshake':
+    elif cmd in ('wifi-scan', 'wifi-handshake', 'wifi-crack'):
         subprocess.call([sys.executable, sys.argv[0], cmd])
 
     else:
