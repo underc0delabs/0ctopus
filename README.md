@@ -1,5 +1,7 @@
 # 0ctopus
 
+<p align="center"><img src="docs/assets/0ctopus-logo.png" alt="0ctopus — Underc0de Labs" width="340"></p>
+
 [![GitHub Repo](https://img.shields.io/badge/Repo-0ctopus-blue)](https://github.com/underc0delabs/0ctopus)
 
 **0ctopus** es una navaja suiza de seguridad informática desarrollada por Underc0de Labs. Proporciona varias herramientas de pentesting y análisis a través de un menú interactivo o comandos directos.

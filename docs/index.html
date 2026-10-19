@@ -2,108 +2,325 @@
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>0ctopus · Documentación · Underc0de</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --celeste:#3CB7EA;--azul:#212349;--rosa:#ff4d6d;--verde:#7dffb0;--amarillo:#F6B40E;
+  --celeste:#3CB7EA;--azul:#212349;--rosa:#ff4d6d;--verde:#35e07f;--amarillo:#F6B40E;
   --bg:#05060d;--panel:#0a0c18;--panel2:#0e1122;--border:#1c2347;--text:#d7e3ff;--muted:#8893c2;
   --glow:0 0 18px color-mix(in srgb,var(--celeste) 45%,transparent),0 0 2px var(--celeste);
   --glow-soft:0 0 10px color-mix(in srgb,var(--celeste) 30%,transparent);
   --f-display:"Pixelify Sans",ui-monospace,Consolas,monospace;
-  --f-body:"Roboto",system-ui,sans-serif;--f-mono:ui-monospace,Consolas,monospace;
+  --f-body:"Roboto",system-ui,sans-serif;--f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:var(--f-body);color:var(--text);background:var(--bg);line-height:1.6;
-  background-image:radial-gradient(circle at center,color-mix(in srgb,var(--celeste) 9%,transparent) 0 1px,transparent 1.6px);
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;font-family:var(--f-body);color:var(--text);background:var(--bg);line-height:1.65;
+  background-image:radial-gradient(circle at center,color-mix(in srgb,var(--celeste) 8%,transparent) 0 1px,transparent 1.6px);
   background-size:38px 38px;background-position:19px 19px}
-body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:999;
-  background:repeating-linear-gradient(0deg,transparent 0 2px,rgba(0,0,0,.14) 2px 3px),
-  radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,.45) 100%);mix-blend-mode:multiply}
-a{color:var(--celeste);text-decoration:none}a:hover{text-shadow:var(--glow-soft)}
-.wrap{max-width:1080px;margin:0 auto;padding:0 16px 72px;position:relative;z-index:1}
-.hud{font-family:var(--f-mono);font-size:11px;color:var(--muted);letter-spacing:2px;
-  border-bottom:1px solid var(--border);padding:7px 16px;background:#02030a;text-align:center}
-.hud b{color:var(--verde)}
-.banner{display:block;width:100%;max-width:1080px;margin:26px auto 8px;border:1px solid var(--border);border-radius:10px;box-shadow:var(--glow-soft)}
-h1{font-family:var(--f-display);font-size:30px;color:#fff;text-shadow:var(--glow);margin:18px 0 4px}
-h1::before{content:">_ ";color:var(--celeste)}
-h2{font-family:var(--f-display);color:var(--celeste);text-shadow:var(--glow-soft);margin:34px 0 10px;font-size:22px}
-h2::before{content:"[ ";color:var(--verde)}h2::after{content:" ]";color:var(--verde)}
-.lead{color:var(--muted);font-family:var(--f-mono);font-size:14px;border-left:2px solid var(--celeste);
-  padding:8px 0 8px 14px;background:linear-gradient(90deg,color-mix(in srgb,var(--celeste) 6%,transparent),transparent)}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:16px 0}
-.card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px 18px;transition:all .15s;display:block}
-.card:hover{border-color:var(--celeste);box-shadow:var(--glow-soft);text-decoration:none;transform:translateY(-2px)}
-.card h3{font-family:var(--f-display);color:#fff;margin:0 0 6px;font-size:17px}
-.card p{margin:0;color:var(--muted);font-size:13px;font-family:var(--f-mono)}
-.card .ic{font-size:22px}
-pre{background:#010209;border:1px solid var(--border);border-radius:8px;padding:16px;overflow-x:auto;
-  font-family:var(--f-mono);font-size:13px;color:#8af5c0;text-shadow:0 0 8px rgba(125,255,176,.25)}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:18px 0}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
+  background:repeating-linear-gradient(0deg,transparent 0 2px,rgba(0,0,0,.13) 2px 3px),
+  radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,.4) 100%);mix-blend-mode:multiply}
+a{color:var(--celeste);text-decoration:none}a:hover{text-shadow:var(--glow-soft);text-decoration:underline}
+/* nav sticky */
+.nav{position:sticky;top:0;z-index:10;background:rgba(2,3,10,.92);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--border);display:flex;gap:4px;flex-wrap:wrap;align-items:center;
+  padding:8px 14px;font-family:var(--f-mono);font-size:12px}
+.nav .brand{font-family:var(--f-display);color:#fff;font-size:16px;margin-right:10px;text-shadow:var(--glow-soft)}
+.nav .brand b{color:var(--celeste)}
+.nav a{color:var(--muted);padding:5px 9px;border-radius:5px}
+.nav a:hover{color:var(--celeste);background:color-mix(in srgb,var(--celeste) 10%,transparent);text-decoration:none}
+.nav a.active{color:var(--celeste);background:color-mix(in srgb,var(--celeste) 16%,transparent);box-shadow:inset 0 -2px var(--celeste)}
+.totop{position:fixed;right:18px;bottom:18px;z-index:20;width:42px;height:42px;border-radius:10px;
+  background:#02030a;border:1px solid var(--celeste);color:var(--celeste);font-family:var(--f-mono);font-size:18px;
+  display:none;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--glow-soft)}
+.totop:hover{box-shadow:var(--glow);text-decoration:none}.totop.show{display:flex}
+.wrap{max-width:980px;margin:0 auto;padding:0 18px 80px;position:relative;z-index:2}
+/* hero */
+.hero{text-align:center;padding:30px 0 10px}
+.hero img{max-width:340px;width:70%;border:1px solid var(--border);border-radius:14px;box-shadow:var(--glow-soft)}
+h1{font-family:var(--f-display);font-size:34px;color:#fff;text-shadow:var(--glow);margin:20px 0 6px}
+.lead{color:var(--muted);font-family:var(--f-mono);font-size:14px;max-width:720px;margin:0 auto}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:26px 0}
 .tile{background:#02030a;border:1px solid var(--border);border-radius:8px;padding:16px;position:relative;overflow:hidden}
 .tile::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--acc,var(--celeste));box-shadow:0 0 12px var(--acc,var(--celeste))}
 .tile .v{font-family:var(--f-display);font-size:28px;color:var(--acc,var(--celeste));text-shadow:0 0 14px color-mix(in srgb,var(--acc,var(--celeste)) 55%,transparent)}
 .tile .l{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:1.4px;color:var(--muted);margin-top:8px}
+.tile .l::before{content:"// "}
 .warn{border:1px solid color-mix(in srgb,var(--rosa) 50%,transparent);background:color-mix(in srgb,var(--rosa) 8%,transparent);
-  border-radius:8px;padding:12px 16px;font-family:var(--f-mono);font-size:13px;color:#ffd0d8;margin:16px 0}
-footer{text-align:center;color:var(--muted);font-family:var(--f-mono);font-size:12px;margin-top:46px;padding-top:20px;border-top:1px solid var(--border)}
+  border-radius:8px;padding:12px 16px;font-family:var(--f-mono);font-size:13px;color:#ffd0d8;margin:18px 0}
+/* secciones */
+section{border-top:1px solid var(--border);padding-top:14px;margin-top:40px}
+h2{font-family:var(--f-display);color:var(--celeste);text-shadow:var(--glow-soft);font-size:24px;margin:10px 0 14px}
+h2::before{content:"[ ";color:var(--verde)}h2::after{content:" ]";color:var(--verde)}
+h3{font-family:var(--f-display);color:#fff;font-size:18px;margin:24px 0 8px}
+h3::before{content:">_ ";color:var(--celeste)}
+h4{font-family:var(--f-mono);color:var(--celeste);font-size:14px;margin:18px 0 6px;text-transform:uppercase;letter-spacing:1px}
+p{margin:10px 0}
+code{font-family:var(--f-mono);font-size:.9em;background:#02030a;border:1px solid var(--border);border-radius:4px;padding:1px 6px;color:var(--celeste)}
+pre{background:#010209;border:1px solid var(--border);border-radius:8px;padding:16px;overflow-x:auto;margin:12px 0}
+pre code{background:none;border:none;padding:0;color:#8af5c0;text-shadow:0 0 8px rgba(125,255,176,.25);font-size:13px}
+ul,ol{margin:10px 0;padding-left:22px}li{margin:5px 0}
+ul li::marker{color:var(--celeste)}
+blockquote{border-left:3px solid var(--celeste);background:color-mix(in srgb,var(--celeste) 6%,transparent);
+  margin:14px 0;padding:10px 16px;color:var(--muted);font-family:var(--f-mono);font-size:13px;border-radius:0 8px 8px 0}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;font-family:var(--f-mono)}
+th,td{text-align:left;padding:9px 13px;border-bottom:1px solid var(--border);vertical-align:top}
+th{color:var(--celeste);text-transform:uppercase;font-size:11px;letter-spacing:1px;background:#02030a}
+tbody tr:hover{background:color-mix(in srgb,var(--celeste) 7%,transparent)}
+.md-img{max-width:100%;border:1px solid var(--border);border-radius:10px;margin:14px 0;background:#05060d}
+hr{border:none;border-top:1px dashed var(--border);margin:22px 0}
+footer{text-align:center;color:var(--muted);font-family:var(--f-mono);font-size:12px;margin-top:50px;padding-top:20px;border-top:1px solid var(--border)}
 footer b{color:var(--celeste)}
 .cursor{display:inline-block;width:.6ch;height:1em;background:var(--celeste);box-shadow:var(--glow);animation:blink 1.05s steps(2,start) infinite;vertical-align:-2px;margin-left:4px}
 @keyframes blink{50%{opacity:0}}
-@media(max-width:640px){h1{font-size:24px}}
+@media(max-width:640px){h1{font-size:26px}.hero img{width:85%}}
 </style>
 </head><body>
-<div class="hud">01110101 01101110 01100100 01100101 01110010 01100011 00110000 01100100 01100101 &nbsp;::&nbsp; <b>INIT</b> underc0de.sys &nbsp;::&nbsp; docs <b>ONLINE</b></div>
+<nav class="nav">
+  <span class="brand">Underc<b>0</b>de · 0ctopus</span>
+  <a href="#inicio">Inicio</a>
+<a href="#installation">Instalación</a>
+<a href="#usage">Uso</a>
+<a href="#tools">Herramientas</a>
+<a href="#reporting">Reportes</a>
+<a href="#agents">Agentes</a>
+<a href="#architecture">Arquitectura</a>
+<a href="#security">Seguridad</a>
+<a href="#faq">FAQ</a>
+<a href="0ctopus-cheatsheet.pdf">PDF</a>
+<a href="../.claude/agents/README.md">Catálogo</a>
+</nav>
 <div class="wrap">
-  <img class="banner" src="assets/banner.svg" alt="Underc0de 0ctopus">
-  <h1>Documentación de 0ctopus</h1>
-  <p class="lead">$ Navaja suiza de pentesting de Underc0de — CLI + reportes HTML + 300+ agentes de seguridad.<span class="cursor"></span></p>
+  <div class="hero" id="inicio">
+    <img src="assets/0ctopus-logo.png" alt="0ctopus — Underc0de Labs">
+    <h1>Documentación de 0ctopus</h1>
+    <p class="lead">Navaja suiza de pentesting de Underc0de — CLI + reportes HTML + 307 agentes de seguridad. Toda la documentación en una sola página.<span class="cursor"></span></p>
+  </div>
 
   <div class="kpis">
-    <div class="tile" style="--acc:var(--celeste)"><div class="v">18</div><div class="l">// herramientas CLI</div></div>
-    <div class="tile" style="--acc:var(--verde)"><div class="v">307</div><div class="l">// agentes</div></div>
-    <div class="tile" style="--acc:var(--amarillo)"><div class="v">43</div><div class="l">// skills</div></div>
-    <div class="tile" style="--acc:var(--rosa)"><div class="v">30+</div><div class="l">// dominios</div></div>
+    <div class="tile" style="--acc:var(--celeste)"><div class="v">18</div><div class="l">herramientas CLI</div></div>
+    <div class="tile" style="--acc:var(--verde)"><div class="v">307</div><div class="l">agentes</div></div>
+    <div class="tile" style="--acc:var(--amarillo)"><div class="v">43</div><div class="l">skills</div></div>
+    <div class="tile" style="--acc:var(--rosa)"><div class="v">30+</div><div class="l">dominios</div></div>
   </div>
 
-  <div class="warn">⚠️ Uso autorizado únicamente. 0ctopus es una herramienta de seguridad ofensiva: usala solo contra objetivos propios o con permiso explícito. Ver <a href="security.md">security.md</a>.</div>
+  <div class="warn">⚠️ Uso autorizado únicamente. 0ctopus es una herramienta de seguridad ofensiva: usala solo contra objetivos propios o con permiso explícito.</div>
 
-  <h2>Secciones</h2>
-  <div class="grid">
-    <a class="card" href="installation.md"><div class="ic">📦</div><h3>Instalación</h3><p>Requisitos e instalación en Linux/macOS/Windows.</p></a>
-    <a class="card" href="usage.md"><div class="ic">🚀</div><h3>Uso</h3><p>CLI, menú interactivo y comandos.</p></a>
-    <a class="card" href="tools.md"><div class="ic">🧰</div><h3>Herramientas</h3><p>Referencia de las 18 herramientas.</p></a>
-    <a class="card" href="reporting.md"><div class="ic">📊</div><h3>Reportes</h3><p>HTML + dashboard estilo Underc0de.</p></a>
-    <a class="card" href="agents.md"><div class="ic">🤖</div><h3>Agentes</h3><p>Orquestador, 300+ subagentes y skills.</p></a>
-    <a class="card" href="architecture.md"><div class="ic">🏗️</div><h3>Arquitectura</h3><p>Estructura y flujos del proyecto.</p></a>
-    <a class="card" href="security.md"><div class="ic">🛡️</div><h3>Seguridad</h3><p>Uso responsable y alcance.</p></a>
-    <a class="card" href="faq.md"><div class="ic">❓</div><h3>FAQ</h3><p>Preguntas frecuentes.</p></a>
-    <a class="card" href="0ctopus-cheatsheet.pdf"><div class="ic">📄</div><h3>Cheatsheet (PDF)</h3><p>Manual imprimible.</p></a>
-    <a class="card" href="../.claude/agents/README.md"><div class="ic">📚</div><h3>Catálogo de agentes</h3><p>Los 307 agentes por dominio.</p></a>
-  </div>
-
-  <h2>Inicio rápido</h2>
-  <pre>git clone https://github.com/underc0delabs/0ctopus.git
+  <section id="installation"><h2>Instalación</h2>
+<h3>Requisitos</h3>
+<ul><li><strong>Python 3.10+</strong> (probado en 3.14).</li><li><code>pip</code> y, recomendado, un entorno virtual.</li><li><strong>Windows</strong>: para captura de paquetes / <code>arp-scan</code> / WiFi, instalar <a href="https://nmap.org/npcap" target="_blank" rel="noopener">Npcap</a> en modo *&quot;WinPcap Compatible&quot;* y ejecutar la terminal <strong>como Administrador</strong>.</li><li><strong>Opcional</strong>: <code>hashcat</code> (para <code>wifi-crack</code>), <code>nmap</code> (algunos flujos), adaptador WiFi con modo monitor (para WiFi).</li></ul>
+<h3>Pasos</h3>
+<pre><code># 1) Clonar
+git clone https://github.com/underc0delabs/0ctopus.git
 cd 0ctopus
-python -m venv env &amp;&amp; source env/bin/activate     # Windows: env\Scripts\activate
-pip install -r requirements.txt
 
-# Reconocimiento + web
-python 0ctopus.py enum-subdomains --domain ejemplo.com
-python 0ctopus.py header-analyzer https://ejemplo.com
+# 2) Entorno virtual (recomendado)
+python -m venv env
+source env/bin/activate        # Linux/macOS
+env\Scripts\activate           # Windows
+
+# 3) Dependencias
+pip install -r requirements.txt</code></pre>
+<h3>Dependencias principales</h3>
+<p><code>requests</code>, <code>urllib3</code>, <code>certifi</code>, <code>scapy</code>, <code>dnspython</code>, <code>python-nmap</code>, <code>click</code>, <code>colorama</code>, <code>pyfiglet</code>, <code>beautifulsoup4</code>, <code>python-whois</code>, <code>pywifi</code>, <code>comtypes</code>, <code>pyhashcat</code>.</p>
+<blockquote>El archivo <code>requirements.txt</code> está en <strong>UTF-8</strong> y con versiones fijadas. Si <code>pip</code> falla, verificá que tu Python sea 3.10+.</blockquote>
+<h3>Verificación</h3>
+<pre><code>python 0ctopus.py --help
+python 0ctopus.py hash-identify 5f4dcc3b5aa765d61d8327deb882cf99</code></pre>
+<p>Si ves el banner y la ayuda de comandos, está listo. Los reportes se generan en <code>output/</code>.</p>
+<h3>Uso con Claude Code (capa agéntica)</h3>
+<p>La carpeta <code>.claude/</code> trae agentes y skills. Abrí el proyecto con Claude Code y pedí, por ejemplo, *&quot;auditá la seguridad de underc0de.org&quot;*. Ver <a href="#agents">agents.md</a>.</p>
+</section>
+
+<section id="usage"><h2>Uso</h2>
+<h3>Menú interactivo</h3>
+<p>Sin argumentos, 0ctopus muestra un menú:</p>
+<pre><code>python 0ctopus.py</code></pre>
+<h3>Comandos directos</h3>
+<pre><code>python 0ctopus.py &lt;comando&gt; [opciones]</code></pre>
+<p>Muchos comandos aceptan el <strong>objetivo por argumento</strong>; si se omite, usan <code>config.py</code>.</p>
+<h4>Reconocimiento</h4>
+<pre><code>python 0ctopus.py enum-subdomains --domain ejemplo.com
+python 0ctopus.py dns-recon ejemplo.com
+python 0ctopus.py whois ejemplo.com
+python 0ctopus.py wayback-urls ejemplo.com --limit 500
+python 0ctopus.py geoip 1.2.3.4</code></pre>
+<h4>Web</h4>
+<pre><code>python 0ctopus.py header-analyzer https://ejemplo.com
 python 0ctopus.py vuln-check --url https://ejemplo.com
+python 0ctopus.py dirb --url https://ejemplo.com --max-depth 3 --verbose
+python 0ctopus.py find-admin https://ejemplo.com</code></pre>
+<h4>Red</h4>
+<pre><code>python 0ctopus.py scan-ports --host ejemplo.com
+python 0ctopus.py arp-scan --network 192.168.1.0/24      # requiere privilegios
+python 0ctopus.py sniff-packets --timeout 20             # requiere privilegios</code></pre>
+<h4>Wireless / hashes</h4>
+<pre><code>python 0ctopus.py wifi-scan            # interactivo, requiere hardware
+python 0ctopus.py wifi-handshake       # interactivo, requiere modo monitor
+python 0ctopus.py wifi-crack           # interactivo, requiere hashcat
+python 0ctopus.py hash-identify &#x27;$2b$12$...&#x27;</code></pre>
+<h4>Reportes</h4>
+<pre><code>python 0ctopus.py report-build output/engagement.json   # reporte consolidado
+python 0ctopus.py rebuild-index                         # regenera el dashboard</code></pre>
+<h3>Salida</h3>
+<p>Todo se guarda en <code>output/</code>:</p>
+<ul><li><code>output/index.html</code> — <strong>dashboard</strong> (abrir en el navegador).</li><li><code>output/reports/*.html</code> — un reporte HTML por ejecución.</li><li>Archivos <code>.txt</code> / <code>.json</code> / <code>.pcap</code> según la herramienta.</li></ul>
+<p>Ver <a href="#reporting">reporting.md</a> para el detalle de los reportes.</p>
+</section>
 
-# Abrir el dashboard de reportes
-# -> output/index.html</pre>
+<section id="tools"><h2>Herramientas</h2>
+<p>Cada herramienta vive en <code>tools/&lt;nombre&gt;.py</code>, expone un comando <code>click</code> y genera un <strong>reporte HTML</strong> en <code>output/reports/</code>.</p>
+<table><thead><tr><th>Comando</th><th>Descripción</th><th>Objetivo</th></tr></thead><tbody><tr><td><code>scan-ports</code></td><td>Escaneo de puertos comunes con detección de servicio/versión</td><td><code>--host</code></td></tr><tr><td><code>vuln-check</code></td><td>Chequeo de vulnerabilidades (TLS, cabeceras, archivos sensibles, WordPress, CVEs)</td><td><code>--url</code></td></tr><tr><td><code>enum-subdomains</code></td><td>Subdominios vía crt.sh + wordlist + DNS</td><td><code>--domain</code></td></tr><tr><td><code>dirb</code></td><td>Crawling de directorios internos</td><td><code>--url</code>, <code>--max-depth</code>, <code>--verbose</code></td></tr><tr><td><code>sniff-packets</code></td><td>Captura de paquetes a <code>.pcap</code></td><td><code>--interface</code>, <code>--count</code>, <code>--timeout</code></td></tr><tr><td><code>dns-recon</code></td><td>Registros A/AAAA/MX/NS/TXT/CNAME/SOA</td><td><code>&lt;dominio&gt;</code></td></tr><tr><td><code>whois</code></td><td>Datos WHOIS del dominio</td><td><code>&lt;dominio&gt;</code></td></tr><tr><td><code>geoip</code></td><td>Geolocalización de IP</td><td><code>&lt;ip&gt;</code></td></tr><tr><td><code>wayback-urls</code></td><td>URLs históricas (Wayback Machine)</td><td><code>&lt;dominio&gt;</code>, <code>--limit</code></td></tr><tr><td><code>header-analyzer</code></td><td>Auditoría de cabeceras de seguridad HTTP</td><td><code>&lt;url&gt;</code></td></tr><tr><td><code>find-admin</code></td><td>Búsqueda de paneles de administración</td><td><code>&lt;url&gt;</code>, <code>-w</code>, <code>-t</code></td></tr><tr><td><code>hash-identify</code></td><td>Identifica el tipo probable de un hash</td><td><code>&lt;hash&gt;</code></td></tr><tr><td><code>arp-scan</code></td><td>Descubre hosts en la LAN (ARP)</td><td><code>--network</code>, <code>--timeout</code></td></tr><tr><td><code>wifi-scan</code></td><td>Escanea redes WiFi cercanas</td><td>*(interactivo)*</td></tr><tr><td><code>wifi-handshake</code></td><td>Captura handshake WPA/WPA2</td><td>*(interactivo)*</td></tr><tr><td><code>wifi-crack</code></td><td>Crackea handshake con hashcat</td><td>*(interactivo)*</td></tr><tr><td><code>report-build</code></td><td>Reporte HTML consolidado desde JSON</td><td><code>&lt;json&gt;</code></td></tr><tr><td><code>rebuild-index</code></td><td>Regenera el dashboard</td><td>—</td></tr></tbody></table>
+<h3>Notas por categoría</h3>
+<ul><li><strong>Red</strong> (<code>scan-ports</code>, <code>arp-scan</code>, <code>sniff-packets</code>): <code>arp-scan</code> y <code>sniff-packets</code> requieren privilegios (admin/root) y, en Windows, Npcap.</li><li><strong>Wireless</strong> (<code>wifi-*</code>): requieren hardware compatible y son interactivas.</li><li><strong>Recon</strong> (<code>dns-recon</code>, <code>whois</code>, <code>wayback-urls</code>, <code>geoip</code>, <code>enum-subdomains</code>): rápidas y poco intrusivas; ideales para mapear la superficie.</li><li><strong>Web</strong> (<code>vuln-check</code>, <code>header-analyzer</code>, <code>dirb</code>, <code>find-admin</code>): <code>dirb</code>/<code>find-admin</code> generan tráfico notable; ajustá parámetros y confirmá autorización.</li></ul>
+<h3>Añadir una herramienta nueva</h3>
+<ol><li>Creá <code>tools/mi_tool.py</code> con un comando <code>@click.command(name=&#x27;mi-tool&#x27;)</code> (<code>cmd_*</code>).</li><li>Al final, generá el reporte: <code>from tools import report; report.save(tool=&#x27;mi-tool&#x27;, title=..., target=..., sections=[...], stats=[...])</code>.</li><li>Registrala en <code>0ctopus.py</code> (<code>from tools.mi_tool import cmd_mi_tool</code> + <code>cli.add_command(...)</code>) y agregala al menú.</li></ol>
+</section>
 
-  <h2>Arquitectura</h2>
-  <img class="banner" src="assets/architecture.svg" alt="Arquitectura de 0ctopus" style="background:#05060d">
+<section id="reporting"><h2>Reportes</h2>
+<p>0ctopus genera reportes con el estilo <strong>&quot;acid lab&quot;</strong> de Underc0de: fondo negro con grilla y <strong>scanlines CRT</strong>, glow neón celeste, tipografía <strong>Pixelify Sans</strong> (HUD) + monospace, cabecera tipo terminal y badges de severidad con glow.</p>
+<h3>Estructura</h3>
+<pre><code>output/
+├── index.html          ← Dashboard (abrir en el navegador)
+├── reports.json        ← Manifiesto de todos los reportes
+└── reports/
+    ├── scan-ports-ejemplo.com-20260101_120000.html
+    ├── vuln-check-ejemplo.com-20260101_120500.html
+    └── ...</code></pre>
+<ul><li><strong>Dashboard</strong> (<code>index.html</code>): métricas globales (total de reportes, herramientas usadas, objetivo principal, último escaneo), buscador en vivo, filtros por herramienta y listado enlazado.</li><li><strong>Reporte individual</strong>: tarjetas de métricas, tablas con estados coloreados, datos clave-valor, listas y salida en crudo tipo terminal.</li></ul>
+<h3>Motor (<code>tools/report.py</code>)</h3>
+<pre><code>from tools import report
+
+report.save(
+    tool=&#x27;scan-ports&#x27;,
+    title=&#x27;Escaneo de puertos&#x27;,
+    target=&#x27;ejemplo.com&#x27;,
+    stats=[report.stat(&#x27;Abiertos&#x27;, 5, &#x27;ok&#x27;), report.stat(&#x27;Filtrados&#x27;, 2, &#x27;warn&#x27;)],
+    sections=[report.table(&#x27;Puertos&#x27;, [&#x27;Puerto&#x27;,&#x27;Estado&#x27;,&#x27;Servicio&#x27;], filas, status_col=1)],
+    raw=&#x27;salida opcional en crudo&#x27;,
+)</code></pre>
+<p>Helpers de sección: <code>table(title, headers, rows, status_col)</code>, <code>keyvalue(title, data)</code>, <code>listing(title, items)</code>, <code>text(title, body)</code>, y <code>stat(label, value, accent)</code> con <code>accent</code> ∈ <code>ok|warn|bad|info|muted</code>.</p>
+<h3>Reporte consolidado (uso agéntico)</h3>
+<p>El agente <code>report-writer</code> escribe un JSON y lo convierte en HTML:</p>
+<pre><code>python 0ctopus.py report-build output/engagement.json</code></pre>
+<p>Esquema del JSON:</p>
+<pre><code>{
+  &quot;tool&quot;: &quot;engagement&quot;,
+  &quot;title&quot;: &quot;Reporte consolidado — ejemplo.com&quot;,
+  &quot;target&quot;: &quot;ejemplo.com&quot;,
+  &quot;stats&quot;: [{&quot;label&quot;: &quot;Riesgo global&quot;, &quot;value&quot;: &quot;MEDIO&quot;, &quot;accent&quot;: &quot;warn&quot;}],
+  &quot;sections&quot;: [
+    {&quot;type&quot;: &quot;text&quot;, &quot;title&quot;: &quot;Resumen ejecutivo&quot;, &quot;body&quot;: &quot;...&quot;},
+    {&quot;type&quot;: &quot;table&quot;, &quot;title&quot;: &quot;Hallazgos&quot;, &quot;headers&quot;: [&quot;Severidad&quot;,&quot;Hallazgo&quot;,&quot;Recomendación&quot;],
+     &quot;rows&quot;: [[&quot;Alta&quot;, &quot;...&quot;, &quot;...&quot;]], &quot;status_col&quot;: 0}
+  ]
+}</code></pre>
+<p>El <code>status_col</code> colorea según palabras clave: *alta/vulnerable/ausente* → rojo, *media/filtrado* → amarillo, *baja/ok/presente* → verde.</p>
+<blockquote><code>output/</code> está en <code>.gitignore</code>: los reportes son artefactos de ejecución y no se versionan.</blockquote>
+</section>
+
+<section id="agents"><h2>Agentes</h2>
+<p><img src="assets/architecture.svg" alt="Arquitectura" class="md-img"></p>
+<p>0ctopus incluye una capa de <strong>agentes y skills</strong> para Claude Code (<code>.claude/</code>) que permite orquestar evaluaciones completas con lenguaje natural.</p>
+<h3>Roles</h3>
+<ul><li><strong>Orquestador</strong> — <code>pentest-orchestrator</code>: planifica la evaluación, confirma alcance/autorización y delega en los especialistas; al final invoca al redactor.</li><li><strong>Especialistas base</strong> (usan la CLI de 0ctopus): <code>recon-specialist</code>, <code>web-specialist</code>, <code>network-specialist</code>, <code>wireless-specialist</code>.</li><li><strong>300+ especialistas avanzados</strong> por dominio (ver catálogo completo en <a href="../.claude/agents/README.md"><code>../.claude/agents/README.md</code></a>).</li><li><strong>Redactor</strong> — <code>report-writer</code>: consolida los hallazgos en reportes HTML dentro de <code>output/</code>.</li></ul>
+<h3>Dominios cubiertos</h3>
+<p>Web/API · Autenticación/Identidad · Mobile (Android/iOS/RN/Flutter) · Streaming/Medios (DRM, HLS/DASH, RTMP) · Cloud/Contenedores (AWS/Azure/GCP, K8s, Docker, IaC) · DevSecOps/CI-CD · Red/Infra · Active Directory/Windows/Linux/macOS · Wireless/RF/IoT/Hardware (WiFi, BLE, Zigbee, LoRa, UART/JTAG/SPI) · ICS/SCADA/OT (Modbus, DNP3, BACnet, OPC-UA) · Médico (DICOM/HL7-FHIR) · Automotriz (CAN/OBD-II) · Avionica/Marítimo (ADS-B/AIS) · Blockchain/Web3 · IA/ML/LLM · Bases de datos · Mensajería/Colas · VoIP/Telecom · Periféricos · Vigilancia/CCTV · Gaming/VR · Wearables/Smart Home · Fintech/POS · Forense/DFIR · Threat Intel/OSINT · Red Team · Compliance/Gobierno · Cripto · Secure Code/SAST.</p>
+<h3>Skills</h3>
+<p>En <code>.claude/skills/</code> hay skills de dominio (metodología + uso de tools): <code>recon</code>, <code>web-audit</code>, <code>network-scan</code>, <code>wifi-audit</code>, <code>mobile-audit</code>, <code>cloud-audit</code>, <code>streaming-audit</code>, <code>reporting</code>, y una skill por cada familia avanzada (iot-hardware, ics-ot, automotive-security, blockchain-web3, ai-llm-security, forensics-dfir, red-team, compliance-governance, etc.).</p>
+<h3>Uso típico</h3>
+<blockquote>*&quot;Auditá la seguridad de underc0de.org&quot;*</blockquote>
+<p>El orquestador: (1) confirma alcance → (2) recon → (3) web/red en paralelo → (4) <code>report-writer</code> consolida → (5) abrís <code>output/index.html</code>.</p>
+<h3>Autorización</h3>
+<p>Todos los agentes trabajan <strong>solo sobre objetivos autorizados</strong>. Las técnicas intrusivas requieren permiso explícito. Ver <a href="#security">security.md</a> y <code>CLAUDE.md</code>.</p>
+</section>
+
+<section id="architecture"><h2>Arquitectura</h2>
+<p><img src="assets/architecture.svg" alt="Arquitectura" class="md-img"></p>
+<h3>Componentes</h3>
+<pre><code>0ctopus/
+├── 0ctopus.py            # CLI principal (click) + menú interactivo
+├── config.py             # HOST / URL_BASE por defecto
+├── requirements.txt
+├── tools/                # Herramientas (una por archivo)
+│   ├── report.py         # Motor de reportes HTML + dashboard
+│   ├── portscanner.py, vuln_check.py, dirb.py, subdomain_enum.py,
+│   ├── packet_sniffer.py, dns_recon.py, whois_lookup.py, ip_geolocator.py,
+│   ├── wayback_urls.py, header_analyzer.py, admin_finder.py, hash_identify.py,
+│   ├── arp_scan.py, wifi_scanner.py, wifi_handshake.py, handshake_crack.py
+├── .claude/
+│   ├── agents/           # Orquestador + 300+ subagentes + catálogo
+│   └── skills/           # Skills de dominio
+├── docs/                 # Esta documentación (md, web, imágenes, PDF)
+└── output/               # Reportes generados (gitignored)</code></pre>
+<h3>Flujo de una herramienta</h3>
+<ol><li>El comando <code>click</code> en <code>0ctopus.py</code> (o el módulo) recibe el objetivo.</li><li>Llama a la función de la herramienta en <code>tools/</code>.</li><li>Guarda la salida clásica (TXT/JSON/PCAP) en <code>output/</code>.</li><li>Llama a <code>report.save(...)</code> → genera el HTML del reporte, actualiza <code>reports.json</code> y regenera <code>index.html</code>.</li></ol>
+<h3>Flujo agéntico</h3>
+<ol><li><code>pentest-orchestrator</code> planifica y delega (tool <code>Agent</code>) en especialistas.</li><li>Cada especialista ejecuta tools de 0ctopus (vía <code>Bash</code>) y/o metodología de su <code>Skill</code>.</li><li>Los reportes individuales caen en <code>output/reports/</code>.</li><li><code>report-writer</code> consolida todo en un reporte <code>engagement</code> con <code>report-build</code>.</li></ol>
+<h3>Principios de diseño</h3>
+<ul><li><strong>Una herramienta = un archivo</strong> en <code>tools/</code>, con comando <code>click</code> y reporte HTML.</li><li><strong>Salida unificada</strong> en <code>output/</code> (gitignored).</li><li><strong>Objetivo configurable</strong> por <code>config.py</code> o por argumento.</li><li><strong>Agentes self-contained</strong> con guard de autorización y referencia a su skill.</li></ul>
+</section>
+
+<section id="security"><h2>Seguridad</h2>
+<p>0ctopus es una herramienta de <strong>seguridad ofensiva</strong>. Su objetivo es el <strong>pentesting autorizado</strong>, los CTF, la investigación y la <strong>defensa</strong>.</p>
+<h3>Reglas de alcance y autorización</h3>
+<ol><li><strong>Solo objetivos autorizados.</strong> Usá 0ctopus únicamente contra sistemas, redes y aplicaciones <strong>propios</strong> o para los que tengas <strong>autorización explícita por escrito</strong>.</li><li><strong>Objetivo por defecto.</strong> <code>config.py</code> apunta a <code>underc0de.org</code> (infraestructura de la comunidad). Cambialo solo por objetivos dentro de tu alcance.</li><li><strong>Técnicas intrusivas</strong> (fuerza bruta, captura de handshakes, cracking, exfiltración, fault injection, etc.) requieren <strong>permiso expreso</strong> y, a menudo, un entorno de laboratorio.</li><li><strong>Dominios sensibles</strong> (médico, automotriz, ICS/OT, aviación, RF/telecom): priorizá recepción pasiva y detección; muchas pruebas activas solo son legales en laboratorio y con autorización.</li><li><strong>Ante la duda, frená y preguntá.</strong> Si un objetivo parece de un tercero sin autorización, no ejecutes nada.</li></ol>
+<h3>Marco legal</h3>
+<p>El acceso no autorizado a sistemas informáticos, la interceptación de comunicaciones ajenas y la ruptura de protecciones de contenido son <strong>ilegales</strong> en la mayoría de las jurisdicciones. El uso indebido de 0ctopus es responsabilidad exclusiva de quien lo ejecuta.</p>
+<h3>Uso defensivo</h3>
+<p>Muchos agentes tienen enfoque <strong>defensivo/detección</strong> (DFIR, threat hunting, detección de EDR, hardening, compliance). Úsalos para mejorar la postura de seguridad de tus propios sistemas.</p>
+<h3>Reporte de vulnerabilidades</h3>
+<p>Si encontrás una vulnerabilidad en 0ctopus, reportala de forma responsable a la comunidad Underc0de: https://underc0de.org</p>
+</section>
+
+<section id="faq"><h2>FAQ</h2>
+<h4>¿Qué es 0ctopus?</h4>
+<p>Una navaja suiza de pentesting de Underc0de: CLI en Python + reportes HTML + capa agéntica (300+ agentes) para Claude.</p>
+<h4>¿Necesito Claude para usarlo?</h4>
+<p>No. La CLI funciona sola (<code>python 0ctopus.py ...</code>). La capa agéntica <code>.claude/</code> es un <strong>extra</strong> para orquestar evaluaciones con Claude Code.</p>
+<h4>¿Dónde quedan los resultados?</h4>
+<p>En <code>output/</code>: un dashboard <code>index.html</code> y un HTML por reporte en <code>reports/</code>, más archivos TXT/JSON/PCAP. Está en <code>.gitignore</code>.</p>
+<h4>¿Puedo apuntar a cualquier dominio?</h4>
+<p>Solo a objetivos <strong>autorizados</strong>. Ver <a href="#security">security.md</a>. El objetivo por defecto es el de <code>config.py</code>.</p>
+<h4><code>pip install -r requirements.txt</code> falla</h4>
+<p>Verificá Python 3.10+ y que el archivo esté en UTF-8 (lo está). En Windows, algunas libs de red necesitan Npcap.</p>
+<h4><code>arp-scan</code> / <code>sniff-packets</code> / <code>wifi-*</code> no funcionan</h4>
+<p>Requieren privilegios (admin/root) y, en Windows, <strong>Npcap</strong> (modo WinPcap). Las de WiFi además necesitan hardware con modo monitor y son interactivas.</p>
+<h4>Veo errores de emojis en la consola (Windows)</h4>
+<p>La consola clásica <code>cmd.exe</code> usa cp1252. Usá Windows Terminal (UTF-8) o establecé <code>PYTHONIOENCODING=utf-8</code>.</p>
+<h4>¿Cómo agrego una herramienta o un agente?</h4>
+<p>Herramienta: ver <a href="#tools">tools.md</a>. Agente: creá un <code>.md</code> en <code>.claude/agents/</code> con frontmatter <code>name</code>/<code>description</code>/<code>tools</code>/<code>model</code> y su metodología.</p>
+<h4>¿Cómo genero un reporte consolidado?</h4>
+<p><code>python 0ctopus.py report-build output/engagement.json</code> (ver <a href="#reporting">reporting.md</a>). O dejá que el agente <code>report-writer</code> lo haga.</p>
+<h4>¿Hay documentación offline / para imprimir?</h4>
+<p>Sí: <code>0ctopus-cheatsheet.pdf</code> en esta carpeta, y el portal <code>index.html</code>.</p>
+</section>
 
   <footer>// EOF — <b>0ctopus</b> · Underc<b>0</b>de Security Toolkit<span class="cursor"></span><br>
     <a href="https://underc0de.org" target="_blank" rel="noopener">underc0de.org</a> ·
     <a href="https://github.com/underc0delabs/0ctopus" target="_blank" rel="noopener">GitHub</a>
   </footer>
 </div>
+<a href="#inicio" class="totop" title="Volver arriba">↑</a>
+<script>
+(function(){
+  const links=[...document.querySelectorAll('.nav a[href^="#"]')];
+  const map={};links.forEach(a=>{const id=a.getAttribute('href').slice(1);if(id)map[id]=a;});
+  const secs=[...document.querySelectorAll('section[id], .hero[id]')];
+  const spy=new IntersectionObserver((ents)=>{
+    ents.forEach(e=>{
+      if(e.isIntersecting){
+        links.forEach(l=>l.classList.remove('active'));
+        const a=map[e.target.id];if(a)a.classList.add('active');
+      }
+    });
+  },{rootMargin:'-60px 0px -70% 0px',threshold:0});
+  secs.forEach(s=>spy.observe(s));
+  const tt=document.querySelector('.totop');
+  addEventListener('scroll',()=>{tt.classList.toggle('show',scrollY>500);});
+})();
+</script>
 </body></html>

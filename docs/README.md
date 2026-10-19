@@ -1,6 +1,6 @@
 # 📚 Documentación de 0ctopus
 
-![0ctopus](assets/banner.svg)
+<p align="center"><img src="assets/0ctopus-logo.png" alt="0ctopus — Underc0de Labs" width="320"></p>
 
 **0ctopus** es la navaja suiza de seguridad de **Underc0de**: una CLI de pentesting en Python, un motor de **reportes HTML** con el estilo de Underc0de y una **capa agéntica** (300+ agentes + skills) para orquestar evaluaciones completas con Claude.
 

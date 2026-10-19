@@ -22,6 +22,7 @@ import os
 import re
 import json
 import html
+import base64
 from datetime import datetime
 
 # --- Rutas -----------------------------------------------------------------
@@ -31,7 +32,26 @@ MANIFEST = os.path.join(OUTPUT_DIR, 'reports.json')
 INDEX = os.path.join(OUTPUT_DIR, 'index.html')
 
 # --- Marca Underc0de -------------------------------------------------------
-LOGO_URL = 'https://underc0de.org/assets/img/pulpo-blanco.png'
+# Logo oficial de 0ctopus embebido (data URI) para reportes autónomos.
+_LOGO_FILE = os.path.join(os.path.dirname(__file__), 'assets', '0ctopus-logo-sm.png')
+_LOGO_FALLBACK = 'https://underc0de.org/assets/img/pulpo-blanco.png'
+_logo_cache = None
+
+
+def _logo_src():
+    """Devuelve el logo como data URI (cacheado); si falta, usa la URL remota."""
+    global _logo_cache
+    if _logo_cache is None:
+        try:
+            with open(_LOGO_FILE, 'rb') as f:
+                b64 = base64.b64encode(f.read()).decode('ascii')
+            _logo_cache = f'data:image/png;base64,{b64}'
+        except OSError:
+            _logo_cache = _LOGO_FALLBACK
+    return _logo_cache
+
+
+LOGO_URL = _logo_src()
 BRAND = 'Underc0de'
 
 # Paleta oficial (manual de marca Underc0de "acid lab")
