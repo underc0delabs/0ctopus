@@ -48,5 +48,25 @@ def cmd_whois(domain):
 
     click.echo(click.style(f"✅ Reporte WHOIS guardado en: {filepath}", fg='green', bold=True))
 
+    # Reporte HTML
+    from tools import report
+    def _fmt(v):
+        return ', '.join(str(x) for x in v) if isinstance(v, (list, tuple)) else str(v)
+    highlights = {
+        'Dominio': _fmt(domain_name), 'Registrador': _fmt(registrar),
+        'WHOIS Server': _fmt(whois_server), 'Creación': _fmt(creation_date),
+        'Expiración': _fmt(expiration_date), 'Actualizado': _fmt(updated_date),
+        'Name Servers': _fmt(name_servers), 'Status': _fmt(status),
+        'Emails': _fmt(emails), 'DNSSEC': _fmt(dnssec),
+    }
+    full = {k: _fmt(v) for k, v in info.items()}
+    html_path = report.save(
+        tool='whois', title='Consulta WHOIS', target=domain,
+        stats=[report.stat('Registrador', _fmt(registrar) or '—', 'info')],
+        sections=[report.keyvalue('Información relevante', highlights),
+                  report.keyvalue('Datos completos', full)],
+    )
+    click.echo(click.style(f"📄 Reporte HTML: {html_path}", fg='green', bold=True))
+
 if __name__ == '__main__':
     cmd_whois()

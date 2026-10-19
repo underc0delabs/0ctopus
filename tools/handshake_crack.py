@@ -140,5 +140,22 @@ def cmd_wifi_crack(output):
     else:
         click.echo(Fore.RED + "\nNo se encontró la contraseña.")
 
+    # Reporte HTML
+    from tools import report
+    html_path = report.save(
+        tool='wifi-crack', title='Cracking de handshake WPA/WPA2',
+        target=os.path.basename(hs_path),
+        stats=[report.stat('Resultado', 'Crackeado' if password else 'Sin éxito',
+                           'ok' if password else 'bad'),
+               report.stat('Método', metodo, 'info')],
+        sections=[report.keyvalue('Resultado del ataque', {
+            'Handshake': hs_path,
+            'Método': metodo,
+            'Contraseña': password if password else 'No encontrada',
+            'Archivo de salida': f'output/{output}',
+        })],
+    )
+    click.echo(Fore.GREEN + f"📄 Reporte HTML: {html_path}")
+
 if __name__ == '__main__':
     cmd_wifi_crack()

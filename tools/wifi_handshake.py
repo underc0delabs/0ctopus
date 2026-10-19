@@ -83,3 +83,18 @@ def cmd_wifi_handshake():
     # Guardar handshake en archivo .pcap
     wrpcap(OUTPUT_FILE, packets)
     click.echo(Fore.GREEN + f"✅ Handshake capturado y guardado en: {OUTPUT_FILE}")
+
+    # Reporte HTML
+    from tools import report
+    html_path = report.save(
+        tool='wifi-handshake', title='Captura de handshake WPA/WPA2', target=iface_name,
+        stats=[report.stat('Paquetes EAPOL', len(packets), 'ok'),
+               report.stat('Interfaz', iface_name, 'info')],
+        sections=[report.keyvalue('Detalles de la captura', {
+            'Interfaz': iface_name,
+            'Duración': f'{timeout}s',
+            'Paquetes EAPOL': len(packets),
+            'Archivo PCAP': OUTPUT_FILE,
+        })],
+    )
+    click.echo(Fore.GREEN + f"📄 Reporte HTML: {html_path}")

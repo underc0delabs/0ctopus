@@ -121,5 +121,20 @@ def cmd_find_admin(base_url, wordlist, threads, timeout, random_agent):
     else:
         click.echo(click.style("   No se detectaron paneles accesibles.", fg='red'))
 
+    # Reporte HTML
+    from tools import report
+    if found:
+        section = report.table('Paneles detectados', ['Ruta', 'Código', 'Estado'],
+                               [[p, c, 'Encontrado'] for p, c in found], status_col=2)
+    else:
+        section = report.listing('Paneles detectados', ['No se detectaron paneles accesibles.'])
+    html_path = report.save(
+        tool='find-admin', title='Búsqueda de paneles de administración', target=base_url,
+        stats=[report.stat('Rutas probadas', len(paths), 'info'),
+               report.stat('Paneles', len(found), 'ok' if found else 'bad')],
+        sections=[section],
+    )
+    click.echo(click.style(f"📄 Reporte HTML: {html_path}", fg='green', bold=True))
+
 if __name__ == '__main__':
     cmd_find_admin()

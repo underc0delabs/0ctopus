@@ -127,5 +127,18 @@ def cmd_wifi_scan():
             f.write(' │ '.join(f"{str(n[key]):{widths[header]}}" for key, header in fields) + '\n')
     click.echo(click.style(f"✅ Resultados guardados en {txt_path}", fg='green'))
 
+    # Reporte HTML
+    from tools import report
+    rows = [[n['ssid'], n['bssid'], n['signal'], n['auth'], n['cipher']] for n in networks]
+    abiertas = sum(1 for n in networks if 'NONE' in n['auth'].upper())
+    html_path = report.save(
+        tool='wifi-scan', title='Escaneo de redes WiFi', target=interface.name(),
+        stats=[report.stat('Redes', len(networks), 'info'),
+               report.stat('Abiertas', abiertas, 'bad' if abiertas else 'ok')],
+        sections=[report.table('Redes encontradas',
+                               ['SSID', 'BSSID', 'Señal', 'Auth', 'Cipher'], rows)],
+    )
+    click.echo(click.style(f"📄 Reporte HTML: {html_path}", fg='green', bold=True))
+
 if __name__ == '__main__':
     cmd_wifi_scan()

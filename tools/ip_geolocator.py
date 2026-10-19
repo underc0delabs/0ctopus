@@ -62,6 +62,16 @@ def cmd_geoip(ip):
     filepath = save_geo_report(data)
     click.echo(click.style(f"Reporte guardado en: {filepath}", fg='green'))
 
+    # Reporte HTML
+    from tools import report
+    html_path = report.save(
+        tool='geoip', title='Geolocalización de IP', target=data.get('query', ip),
+        stats=[report.stat('País', data.get('country', '—'), 'info'),
+               report.stat('ISP', data.get('isp', '—'), 'muted')],
+        sections=[report.keyvalue('Datos de geolocalización', data)],
+    )
+    click.echo(click.style(f"📄 Reporte HTML: {html_path}", fg='green', bold=True))
+
 
 if __name__ == '__main__':
     cmd_geoip()

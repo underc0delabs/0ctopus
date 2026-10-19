@@ -52,7 +52,8 @@ def grab_banner(host: str, port: int, timeout: float = 1) -> str:
     finally:
         sock.close()
 
-def scan(common: bool = True) -> list[dict]:
+def scan(common: bool = True, host: str = None) -> list[dict]:
+    target = host or HOST
     ports = COMMON_PORTS if common else range(1, 65536)
     results = []
 
@@ -60,20 +61,20 @@ def scan(common: bool = True) -> list[dict]:
         state = 'filtered'
         service = '-'
         version = '-'
-        
+
         try:
             with socket.socket() as sock:
                 sock.settimeout(1.5)
-                if sock.connect_ex((HOST, port)) == 0:
+                if sock.connect_ex((target, port)) == 0:
                     state = 'open'
                     service = SERVICES.get(port, '-')
-                    version = grab_banner(HOST, port) or '-'
-                    
+                    version = grab_banner(target, port) or '-'
+
                     if port in (80, 443) and version == '-':
                         try:
                             scheme = 'https' if port == 443 else 'http'
                             response = requests.head(
-                                f"{scheme}://{HOST}:{port}",
+                                f"{scheme}://{target}:{port}",
                                 timeout=2,
                                 allow_redirects=True
                             )
