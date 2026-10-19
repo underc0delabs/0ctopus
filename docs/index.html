@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>0ctopus · Documentación · Underc0de</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --celeste:#3CB7EA;--azul:#212349;--rosa:#ff4d6d;--verde:#7dffb0;--amarillo:#F6B40E;
+  --bg:#05060d;--panel:#0a0c18;--panel2:#0e1122;--border:#1c2347;--text:#d7e3ff;--muted:#8893c2;
+  --glow:0 0 18px color-mix(in srgb,var(--celeste) 45%,transparent),0 0 2px var(--celeste);
+  --glow-soft:0 0 10px color-mix(in srgb,var(--celeste) 30%,transparent);
+  --f-display:"Pixelify Sans",ui-monospace,Consolas,monospace;
+  --f-body:"Roboto",system-ui,sans-serif;--f-mono:ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--f-body);color:var(--text);background:var(--bg);line-height:1.6;
+  background-image:radial-gradient(circle at center,color-mix(in srgb,var(--celeste) 9%,transparent) 0 1px,transparent 1.6px);
+  background-size:38px 38px;background-position:19px 19px}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:999;
+  background:repeating-linear-gradient(0deg,transparent 0 2px,rgba(0,0,0,.14) 2px 3px),
+  radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,.45) 100%);mix-blend-mode:multiply}
+a{color:var(--celeste);text-decoration:none}a:hover{text-shadow:var(--glow-soft)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px 72px;position:relative;z-index:1}
+.hud{font-family:var(--f-mono);font-size:11px;color:var(--muted);letter-spacing:2px;
+  border-bottom:1px solid var(--border);padding:7px 16px;background:#02030a;text-align:center}
+.hud b{color:var(--verde)}
+.banner{display:block;width:100%;max-width:1080px;margin:26px auto 8px;border:1px solid var(--border);border-radius:10px;box-shadow:var(--glow-soft)}
+h1{font-family:var(--f-display);font-size:30px;color:#fff;text-shadow:var(--glow);margin:18px 0 4px}
+h1::before{content:">_ ";color:var(--celeste)}
+h2{font-family:var(--f-display);color:var(--celeste);text-shadow:var(--glow-soft);margin:34px 0 10px;font-size:22px}
+h2::before{content:"[ ";color:var(--verde)}h2::after{content:" ]";color:var(--verde)}
+.lead{color:var(--muted);font-family:var(--f-mono);font-size:14px;border-left:2px solid var(--celeste);
+  padding:8px 0 8px 14px;background:linear-gradient(90deg,color-mix(in srgb,var(--celeste) 6%,transparent),transparent)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:16px 0}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px 18px;transition:all .15s;display:block}
+.card:hover{border-color:var(--celeste);box-shadow:var(--glow-soft);text-decoration:none;transform:translateY(-2px)}
+.card h3{font-family:var(--f-display);color:#fff;margin:0 0 6px;font-size:17px}
+.card p{margin:0;color:var(--muted);font-size:13px;font-family:var(--f-mono)}
+.card .ic{font-size:22px}
+pre{background:#010209;border:1px solid var(--border);border-radius:8px;padding:16px;overflow-x:auto;
+  font-family:var(--f-mono);font-size:13px;color:#8af5c0;text-shadow:0 0 8px rgba(125,255,176,.25)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:18px 0}
+.tile{background:#02030a;border:1px solid var(--border);border-radius:8px;padding:16px;position:relative;overflow:hidden}
+.tile::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--acc,var(--celeste));box-shadow:0 0 12px var(--acc,var(--celeste))}
+.tile .v{font-family:var(--f-display);font-size:28px;color:var(--acc,var(--celeste));text-shadow:0 0 14px color-mix(in srgb,var(--acc,var(--celeste)) 55%,transparent)}
+.tile .l{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:1.4px;color:var(--muted);margin-top:8px}
+.warn{border:1px solid color-mix(in srgb,var(--rosa) 50%,transparent);background:color-mix(in srgb,var(--rosa) 8%,transparent);
+  border-radius:8px;padding:12px 16px;font-family:var(--f-mono);font-size:13px;color:#ffd0d8;margin:16px 0}
+footer{text-align:center;color:var(--muted);font-family:var(--f-mono);font-size:12px;margin-top:46px;padding-top:20px;border-top:1px solid var(--border)}
+footer b{color:var(--celeste)}
+.cursor{display:inline-block;width:.6ch;height:1em;background:var(--celeste);box-shadow:var(--glow);animation:blink 1.05s steps(2,start) infinite;vertical-align:-2px;margin-left:4px}
+@keyframes blink{50%{opacity:0}}
+@media(max-width:640px){h1{font-size:24px}}
+</style>
+</head><body>
+<div class="hud">01110101 01101110 01100100 01100101 01110010 01100011 00110000 01100100 01100101 &nbsp;::&nbsp; <b>INIT</b> underc0de.sys &nbsp;::&nbsp; docs <b>ONLINE</b></div>
+<div class="wrap">
+  <img class="banner" src="assets/banner.svg" alt="Underc0de 0ctopus">
+  <h1>Documentación de 0ctopus</h1>
+  <p class="lead">$ Navaja suiza de pentesting de Underc0de — CLI + reportes HTML + 300+ agentes de seguridad.<span class="cursor"></span></p>
+
+  <div class="kpis">
+    <div class="tile" style="--acc:var(--celeste)"><div class="v">18</div><div class="l">// herramientas CLI</div></div>
+    <div class="tile" style="--acc:var(--verde)"><div class="v">307</div><div class="l">// agentes</div></div>
+    <div class="tile" style="--acc:var(--amarillo)"><div class="v">43</div><div class="l">// skills</div></div>
+    <div class="tile" style="--acc:var(--rosa)"><div class="v">30+</div><div class="l">// dominios</div></div>
+  </div>
+
+  <div class="warn">⚠️ Uso autorizado únicamente. 0ctopus es una herramienta de seguridad ofensiva: usala solo contra objetivos propios o con permiso explícito. Ver <a href="security.md">security.md</a>.</div>
+
+  <h2>Secciones</h2>
+  <div class="grid">
+    <a class="card" href="installation.md"><div class="ic">📦</div><h3>Instalación</h3><p>Requisitos e instalación en Linux/macOS/Windows.</p></a>
+    <a class="card" href="usage.md"><div class="ic">🚀</div><h3>Uso</h3><p>CLI, menú interactivo y comandos.</p></a>
+    <a class="card" href="tools.md"><div class="ic">🧰</div><h3>Herramientas</h3><p>Referencia de las 18 herramientas.</p></a>
+    <a class="card" href="reporting.md"><div class="ic">📊</div><h3>Reportes</h3><p>HTML + dashboard estilo Underc0de.</p></a>
+    <a class="card" href="agents.md"><div class="ic">🤖</div><h3>Agentes</h3><p>Orquestador, 300+ subagentes y skills.</p></a>
+    <a class="card" href="architecture.md"><div class="ic">🏗️</div><h3>Arquitectura</h3><p>Estructura y flujos del proyecto.</p></a>
+    <a class="card" href="security.md"><div class="ic">🛡️</div><h3>Seguridad</h3><p>Uso responsable y alcance.</p></a>
+    <a class="card" href="faq.md"><div class="ic">❓</div><h3>FAQ</h3><p>Preguntas frecuentes.</p></a>
+    <a class="card" href="0ctopus-cheatsheet.pdf"><div class="ic">📄</div><h3>Cheatsheet (PDF)</h3><p>Manual imprimible.</p></a>
+    <a class="card" href="../.claude/agents/README.md"><div class="ic">📚</div><h3>Catálogo de agentes</h3><p>Los 307 agentes por dominio.</p></a>
+  </div>
+
+  <h2>Inicio rápido</h2>
+  <pre>git clone https://github.com/underc0delabs/0ctopus.git
+cd 0ctopus
+python -m venv env &amp;&amp; source env/bin/activate     # Windows: env\Scripts\activate
+pip install -r requirements.txt
+
+# Reconocimiento + web
+python 0ctopus.py enum-subdomains --domain ejemplo.com
+python 0ctopus.py header-analyzer https://ejemplo.com
+python 0ctopus.py vuln-check --url https://ejemplo.com
+
+# Abrir el dashboard de reportes
+# -> output/index.html</pre>
+
+  <h2>Arquitectura</h2>
+  <img class="banner" src="assets/architecture.svg" alt="Arquitectura de 0ctopus" style="background:#05060d">
+
+  <footer>// EOF — <b>0ctopus</b> · Underc<b>0</b>de Security Toolkit<span class="cursor"></span><br>
+    <a href="https://underc0de.org" target="_blank" rel="noopener">underc0de.org</a> ·
+    <a href="https://github.com/underc0delabs/0ctopus" target="_blank" rel="noopener">GitHub</a>
+  </footer>
+</div>
+</body></html>

@@ -130,17 +130,30 @@ Los reportes usan la estética **"acid lab"** de Underc0de: fondo negro con gril
 
 ## 🤖 Uso agéntico con Claude
 
-0ctopus incluye una capa de **agentes y skills** para Claude Code (`.claude/`), que permite orquestar evaluaciones completas.
+0ctopus incluye una capa de **agentes y skills** para Claude Code (`.claude/`), que permite orquestar evaluaciones completas. **307 agentes** y **43 skills**.
 
 - **Orquestador**: `pentest-orchestrator` planifica y delega.
 - **Especialistas base**: `recon-specialist`, `web-specialist`, `network-specialist`, `wireless-specialist` (usan la CLI de 0ctopus).
-- **60 especialistas avanzados**: web/API, auth, mobile, streaming, cloud/contenedores, red, Active Directory, wireless/RF/IoT, OSINT, reversing y cripto. Catálogo en `.claude/agents/README.md`.
+- **300+ especialistas avanzados** por dominio: web/API, auth, mobile (Android/iOS/RN/Flutter), streaming/medios (DRM, HLS/DASH, RTMP), cloud/contenedores (AWS/Azure/GCP, K8s, Docker, IaC), DevSecOps/CI-CD, red/infra, Active Directory/Windows/Linux/macOS, wireless/RF/IoT/hardware (WiFi, BLE, Zigbee, LoRa, UART/JTAG/SPI), ICS/SCADA/OT (Modbus, DNP3, BACnet, OPC-UA), médico (DICOM/HL7-FHIR), automotriz (CAN/OBD-II), avionica/marítimo (ADS-B/AIS), blockchain/Web3, IA/ML/LLM, bases de datos, mensajería/colas, VoIP, periféricos, vigilancia, gaming/VR, wearables/smart home, fintech/POS, forense/DFIR, threat intel/OSINT, red team, compliance, cripto y secure code/SAST. Catálogo completo en `.claude/agents/README.md`.
 - **Redactor**: `report-writer` consolida los hallazgos en `output/`.
-- **Skills** (`.claude/skills/`): `recon`, `web-audit`, `network-scan`, `wifi-audit`, `mobile-audit`, `cloud-audit`, `streaming-audit`, `reporting`.
+- **Skills** (`.claude/skills/`): una por dominio (`recon`, `web-audit`, `mobile-audit`, `cloud-audit`, `iot-hardware`, `ics-ot`, `blockchain-web3`, `ai-llm-security`, `forensics-dfir`, `red-team`, `compliance-governance`, `reporting`, etc.).
 
 **Ejemplo:** pedile a Claude *"auditá la seguridad de underc0de.org"* y el orquestador coordina recon → web/red → reporte, dejando todo en `output/`.
 
-> ⚠️ Usar **solo contra objetivos autorizados**. Ver `CLAUDE.md` para las reglas de alcance y autorización.
+> ⚠️ Usar **solo contra objetivos autorizados**. Ver `CLAUDE.md` y `docs/security.md`.
+
+---
+
+## 📚 Documentación
+
+La carpeta [`docs/`](docs/) contiene documentación completa en varios formatos:
+
+- 🌐 **Web**: [`docs/index.html`](docs/index.html) — portal de documentación (estilo Underc0de).
+- 📄 **PDF**: [`docs/0ctopus-cheatsheet.pdf`](docs/0ctopus-cheatsheet.pdf) — manual/cheatsheet imprimible.
+- 🖼️ **Imágenes**: `docs/assets/` — banner (SVG/PNG), logo y diagrama de arquitectura.
+- 📝 **Markdown**: instalación, uso, herramientas, reportes, agentes, arquitectura, seguridad y FAQ.
+
+Índice en [`docs/README.md`](docs/README.md).
 
 ---
 

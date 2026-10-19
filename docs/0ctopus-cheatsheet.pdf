@@ -1,0 +1,354 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 3 /Kids [3 0 R 4 0 R 5 0 R] >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 9 0 R >> >> /Contents 6 0 R >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 9 0 R >> >> /Contents 7 0 R >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 9 0 R >> >> /Contents 8 0 R >>
+endobj
+6 0 obj
+<< /Length 2080 >>
+stream
+BT
+0.235 0.718 0.918 rg
+/F1 26 Tf
+1 0 0 1 54 792.0 Tm
+(Underc0de // 0ctopus) Tj
+0.549 0.588 0.745 rg
+/F1 13 Tf
+1 0 0 1 54 763.0 Tm
+(Security Toolkit - Manual / Cheatsheet) Tj
+0.863 0.882 0.961 rg
+/F1 8 Tf
+1 0 0 1 54 747.0 Tm
+() Tj
+0.490 1.000 0.690 rg
+/F1 15 Tf
+1 0 0 1 54 732.0 Tm
+(Que es) Tj
+0.863 0.882 0.961 rg
+/F1 10 Tf
+1 0 0 1 54 714.0 Tm
+(0ctopus es la navaja suiza de seguridad de Underc0de: una CLI en Python con) Tj
+0.863 0.882 0.961 rg
+/F1 10 Tf
+1 0 0 1 54 699.0 Tm
+(herramientas de pentesting, un motor de reportes HTML con el estilo de Underc0de) Tj
+0.863 0.882 0.961 rg
+/F1 10 Tf
+1 0 0 1 54 684.0 Tm
+(y una capa agentica \(300+ agentes y skills\) para orquestar evaluaciones completas.) Tj
+0.863 0.882 0.961 rg
+/F1 8 Tf
+1 0 0 1 54 669.0 Tm
+() Tj
+0.490 1.000 0.690 rg
+/F1 15 Tf
+1 0 0 1 54 654.0 Tm
+(Instalacion) Tj
+0.235 0.718 0.918 rg
+/F1 10 Tf
+1 0 0 1 54 636.0 Tm
+(git clone https://github.com/underc0delabs/0ctopus.git) Tj
+0.235 0.718 0.918 rg
+/F1 10 Tf
+1 0 0 1 54 621.0 Tm
+(cd 0ctopus) Tj
+0.235 0.718 0.918 rg
+/F1 10 Tf
+1 0 0 1 54 606.0 Tm
+(python -m venv env && source env/bin/activate   \(Windows: env\\Scripts\\activate\)) Tj
+0.235 0.718 0.918 rg
+/F1 10 Tf
+1 0 0 1 54 591.0 Tm
+(pip install -r requirements.txt) Tj
+0.863 0.882 0.961 rg
+/F1 8 Tf
+1 0 0 1 54 576.0 Tm
+() Tj
+0.863 0.882 0.961 rg
+/F1 10 Tf
+1 0 0 1 54 561.0 Tm
+(En Windows: instalar Npcap \(modo WinPcap\) y ejecutar como Administrador para) Tj
+0.863 0.882 0.961 rg
+/F1 10 Tf
+1 0 0 1 54 546.0 Tm
+(captura de paquetes / arp-scan / wifi.) Tj
+0.863 0.882 0.961 rg
+/F1 8 Tf
+1 0 0 1 54 531.0 Tm
+() Tj
+0.490 1.000 0.690 rg
+/F1 15 Tf
+1 0 0 1 54 516.0 Tm
+(Configuracion) Tj
+0.863 0.882 0.961 rg
+/F1 10 Tf
+1 0 0 1 54 498.0 Tm
+(Editar config.py: HOST y URL_BASE \(objetivo por defecto\).) Tj
+0.863 0.882 0.961 rg
+/F1 10 Tf
+1 0 0 1 54 483.0 Tm
+(Tambien se puede pasar el objetivo por argumento en cada comando.) Tj
+0.863 0.882 0.961 rg
+/F1 8 Tf
+1 0 0 1 54 468.0 Tm
+() Tj
+0.490 1.000 0.690 rg
+/F1 10 Tf
+1 0 0 1 54 453.0 Tm
+(AUTORIZACION: usar 0ctopus SOLO contra objetivos propios o con permiso explicito.) Tj
+ET
+endstream
+endobj
+7 0 obj
+<< /Length 2551 >>
+stream
+BT
+0.235 0.718 0.918 rg
+/F1 18 Tf
+1 0 0 1 54 792.0 Tm
+(Referencia de comandos) Tj
+0.863 0.882 0.961 rg
+/F1 6 Tf
+1 0 0 1 54 771.0 Tm
+() Tj
+0.490 1.000 0.690 rg
+/F1 14 Tf
+1 0 0 1 54 756.0 Tm
+(Reconocimiento) Tj
+0.235 0.718 0.918 rg
+/F1 10 Tf
+1 0 0 1 54 739.0 Tm
+(python 0ctopus.py enum-subdomains --domain <dominio>) Tj
+0.235 0.718 0.918 rg
+/F1 10 Tf
+1 0 0 1 54 724.0 Tm
+(python 0ctopus.py dns-recon <dominio>) Tj
+0.235 0.718 0.918 rg
+/F1 10 Tf
+1 0 0 1 54 709.0 Tm
+(python 0ctopus.py whois <dominio>) Tj
+0.235 0.718 0.918 rg
+/F1 10 Tf
+1 0 0 1 54 694.0 Tm
+(python 0ctopus.py wayback-urls <dominio> [--limit N]) Tj
+0.235 0.718 0.918 rg
+/F1 10 Tf
+1 0 0 1 54 679.0 Tm
+(python 0ctopus.py geoip <ip>) Tj
+0.863 0.882 0.961 rg
+/F1 6 Tf
+1 0 0 1 54 664.0 Tm
+() Tj
+0.490 1.000 0.690 rg
+/F1 14 Tf
+1 0 0 1 54 649.0 Tm
+(Web) Tj
+0.235 0.718 0.918 rg
+/F1 10 Tf
+1 0 0 1 54 632.0 Tm
+(python 0ctopus.py header-analyzer <url>) Tj
+0.235 0.718 0.918 rg
+/F1 10 Tf
+1 0 0 1 54 617.0 Tm
+(python 0ctopus.py vuln-check --url <url>) Tj
+0.235 0.718 0.918 rg
+/F1 10 Tf
+1 0 0 1 54 602.0 Tm
+(python 0ctopus.py dirb --url <url> [--max-depth N] [--verbose]) Tj
+0.235 0.718 0.918 rg
+/F1 10 Tf
+1 0 0 1 54 587.0 Tm
+(python 0ctopus.py find-admin <url>) Tj
+0.863 0.882 0.961 rg
+/F1 6 Tf
+1 0 0 1 54 572.0 Tm
+() Tj
+0.490 1.000 0.690 rg
+/F1 14 Tf
+1 0 0 1 54 557.0 Tm
+(Red) Tj
+0.235 0.718 0.918 rg
+/F1 10 Tf
+1 0 0 1 54 540.0 Tm
+(python 0ctopus.py scan-ports --host <host>) Tj
+0.235 0.718 0.918 rg
+/F1 10 Tf
+1 0 0 1 54 525.0 Tm
+(python 0ctopus.py arp-scan [--network CIDR]        \(requiere privilegios\)) Tj
+0.235 0.718 0.918 rg
+/F1 10 Tf
+1 0 0 1 54 510.0 Tm
+(python 0ctopus.py sniff-packets                    \(requiere privilegios\)) Tj
+0.863 0.882 0.961 rg
+/F1 6 Tf
+1 0 0 1 54 495.0 Tm
+() Tj
+0.490 1.000 0.690 rg
+/F1 14 Tf
+1 0 0 1 54 480.0 Tm
+(Wireless / Hashes) Tj
+0.235 0.718 0.918 rg
+/F1 10 Tf
+1 0 0 1 54 463.0 Tm
+(python 0ctopus.py wifi-scan | wifi-handshake | wifi-crack   \(interactivos\)) Tj
+0.235 0.718 0.918 rg
+/F1 10 Tf
+1 0 0 1 54 448.0 Tm
+(python 0ctopus.py hash-identify <hash>) Tj
+0.863 0.882 0.961 rg
+/F1 6 Tf
+1 0 0 1 54 433.0 Tm
+() Tj
+0.490 1.000 0.690 rg
+/F1 14 Tf
+1 0 0 1 54 418.0 Tm
+(Reportes) Tj
+0.235 0.718 0.918 rg
+/F1 10 Tf
+1 0 0 1 54 401.0 Tm
+(python 0ctopus.py report-build <archivo.json>      \(reporte consolidado\)) Tj
+0.235 0.718 0.918 rg
+/F1 10 Tf
+1 0 0 1 54 386.0 Tm
+(python 0ctopus.py rebuild-index                    \(regenera dashboard\)) Tj
+0.863 0.882 0.961 rg
+/F1 10 Tf
+1 0 0 1 54 371.0 Tm
+(Abrir output/index.html en el navegador para el dashboard.) Tj
+ET
+endstream
+endobj
+8 0 obj
+<< /Length 2546 >>
+stream
+BT
+0.235 0.718 0.918 rg
+/F1 18 Tf
+1 0 0 1 54 792.0 Tm
+(Capa agentica) Tj
+0.863 0.882 0.961 rg
+/F1 6 Tf
+1 0 0 1 54 771.0 Tm
+() Tj
+0.863 0.882 0.961 rg
+/F1 10 Tf
+1 0 0 1 54 756.0 Tm
+(Orquestador: pentest-orchestrator \(planifica y delega\).) Tj
+0.863 0.882 0.961 rg
+/F1 10 Tf
+1 0 0 1 54 741.0 Tm
+(Especialistas base: recon / web / network / wireless \(usan la CLI\).) Tj
+0.863 0.882 0.961 rg
+/F1 10 Tf
+1 0 0 1 54 726.0 Tm
+(Redactor: report-writer \(consolida en output/\).) Tj
+0.863 0.882 0.961 rg
+/F1 10 Tf
+1 0 0 1 54 711.0 Tm
+(300+ especialistas avanzados por dominio:) Tj
+0.549 0.588 0.745 rg
+/F1 10 Tf
+1 0 0 1 54 696.0 Tm
+(  - Web/API: OWASP, SQLi, XSS, SSRF, XXE, SSTI, smuggling, GraphQL, JWT...) Tj
+0.549 0.588 0.745 rg
+/F1 10 Tf
+1 0 0 1 54 681.0 Tm
+(  - Mobile: APK/IPA, Frida, pinning, WebView, biometria, NFC...) Tj
+0.549 0.588 0.745 rg
+/F1 10 Tf
+1 0 0 1 54 666.0 Tm
+(  - Cloud/Contenedores: AWS/Azure/GCP, K8s, Docker, IaC, IAM...) Tj
+0.549 0.588 0.745 rg
+/F1 10 Tf
+1 0 0 1 54 651.0 Tm
+(  - Red/AD/Windows/Linux/macOS: AD, Kerberos, privesc, segmentacion...) Tj
+0.549 0.588 0.745 rg
+/F1 10 Tf
+1 0 0 1 54 636.0 Tm
+(  - Wireless/RF/IoT/Hardware: WiFi, BLE, Zigbee, LoRa, UART/JTAG/SPI...) Tj
+0.549 0.588 0.745 rg
+/F1 10 Tf
+1 0 0 1 54 621.0 Tm
+(  - ICS/OT: Modbus, DNP3, BACnet, OPC-UA, S7comm...) Tj
+0.549 0.588 0.745 rg
+/F1 10 Tf
+1 0 0 1 54 606.0 Tm
+(  - Automotriz/Medico/Avionica/Maritimo: CAN, OBD-II, DICOM, ADS-B, AIS...) Tj
+0.549 0.588 0.745 rg
+/F1 10 Tf
+1 0 0 1 54 591.0 Tm
+(  - Blockchain/Web3: Solidity, DeFi, bridges, wallets, MEV...) Tj
+0.549 0.588 0.745 rg
+/F1 10 Tf
+1 0 0 1 54 576.0 Tm
+(  - IA/LLM: prompt injection, jailbreaks, RAG, agentes, privacidad...) Tj
+0.549 0.588 0.745 rg
+/F1 10 Tf
+1 0 0 1 54 561.0 Tm
+(  - Datos/Mensajeria/VoIP: SQL/NoSQL, Kafka, MQTT, SIP...) Tj
+0.549 0.588 0.745 rg
+/F1 10 Tf
+1 0 0 1 54 546.0 Tm
+(  - DFIR/Threat Intel/Red Team/Compliance/Cripto/SAST.) Tj
+0.863 0.882 0.961 rg
+/F1 6 Tf
+1 0 0 1 54 531.0 Tm
+() Tj
+0.863 0.882 0.961 rg
+/F1 10 Tf
+1 0 0 1 54 516.0 Tm
+(Skills de dominio en .claude/skills/ \(metodologia + uso de tools\).) Tj
+0.235 0.718 0.918 rg
+/F1 10 Tf
+1 0 0 1 54 501.0 Tm
+(Catalogo completo: .claude/agents/README.md) Tj
+0.863 0.882 0.961 rg
+/F1 6 Tf
+1 0 0 1 54 486.0 Tm
+() Tj
+0.490 1.000 0.690 rg
+/F1 14 Tf
+1 0 0 1 54 471.0 Tm
+(Uso tipico) Tj
+0.863 0.882 0.961 rg
+/F1 10 Tf
+1 0 0 1 54 454.0 Tm
+(Pedile a Claude: "audita la seguridad de underc0de.org".) Tj
+0.863 0.882 0.961 rg
+/F1 10 Tf
+1 0 0 1 54 439.0 Tm
+(El orquestador coordina recon -> web/red -> reporte en output/.) Tj
+ET
+endstream
+endobj
+9 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 10
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000133 00000 n 
+0000000259 00000 n 
+0000000385 00000 n 
+0000000511 00000 n 
+0000002643 00000 n 
+0000005246 00000 n 
+0000007844 00000 n 
+trailer
+<< /Size 10 /Root 1 0 R >>
+startxref
+7914
+%%EOF
